@@ -22,8 +22,7 @@ library(psych)
 library(survival)
 library(survminer)
 
-data_location <- here::here("SEER.csv")
-seer1 <- read.csv(data_location)
+seer1 <- read.csv("SEER.csv")
 
 attach(seer1)
 ```
@@ -31,7 +30,45 @@ attach(seer1)
 
 
 # Summary/Abstract
-_Write a summary of your project._
+
+Research Question
+
+Among males diagnosed with prostate cancer, are race and ethnicity associated with time to all-cause mortality?
+
+Background
+
+Because of the discrepancies in the literature regarding the relationship between race/ethnicity and mortality among patients with prostate cancer, one of the motivations for this project is to better understand that relationship using a large national registry of prostate cancer patients. This project is different from what has already been done because other studies have used smaller sample sizes or have not included several racial and ethnic groups in the study population. 
+
+Data Source
+
+The Surveillance, Epidemiology, and End Results (SEER) Program of the National Cancer Institute (NCI) provides information on cancer incidence and survival in the United States. SEER uses population-based cancer registries that cover about half of the national population. The SEER registries collect data on tumor site and morphology, stage at diagnosis, treatment, vital status, and patient demographics, including race and ethnicity. This project will use the SEER*Stat software (version 8.4.2) to access the SEER 18 (2000-2018) Registry for data on 1,048,575 prostate cancer patients (i.e, observations).
+
+Study Design 
+
+The data registry is based on a prospective cohort study that investigated male patients with prostate cancer in the U.S. from 2000 to 2018. All ages and races/ethnicities will be included in this project, however, only patients with localized, regional, or distant cancer stage at diagnosis will be included. Patients with unknown/missing survival time will be excluded.
+
+Covariates
+
+The main outcome of interest is all-cause mortality. The main exposure of interest is race/ethnicity, which includes the following categories: “Non-Hispanic White”, “Non-Hispanic Black”, “Non-Hispanic Asian or Pacific Islander”, “Hispanic (all races)”, and “Other”. The other covariates, age at diagnosis and cancer stage at diagnosis, are categorical variables.
+
+Statistical Analysis
+
+All analyses will be conducted using R software (version 4.3.1). Survival analysis will be performed for Kaplan-Meier survival estimates and curves. Cox regression will be used to compute adjusted hazard ratios and 95% confidence intervals. The Cox proportional hazards assumption will be tested using log-log survival curves and extended Cox models for each covariate.
+
+
+```{r}
+#Get an overview and summary of raw data
+str(seer1)
+summary(seer1)
+
+#Descriptive analysis of raw data
+table(race, useNA = "always")
+table(age, useNA = "always")
+table(stage, useNA = "always")
+table(vital_status, useNA = "always")
+survival_months <- as.numeric(survival_months)
+summary(survival_months)
+```
 
 
 {{< pagebreak >}}
