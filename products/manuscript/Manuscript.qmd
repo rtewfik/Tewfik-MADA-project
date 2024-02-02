@@ -1,7 +1,6 @@
 ---
-title: "Example Manuscript Template for a Data Analysis Project"
-subtitle: ""
-author: Andreas Handel
+title: "Survival Analysis of Males in the U.S. with Prostate Cancer Based on Race and Ethnicity"
+author: Ranni Tewfik
 date: "`r Sys.Date()`"
 format:
   docx:
@@ -12,16 +11,21 @@ bibliography: ../assets/dataanalysis-references.bib
 csl: ../assets/apa.csl
 ---
 
-The structure below is one possible setup for a data analysis project (including the course project). For a manuscript, adjust as needed. 
-You don't need to have exactly these sections, but the content covering those sections should be addressed.
-
-This uses MS Word as output format. [See here](https://quarto.org/docs/output-formats/ms-word.html) for more information. You can switch to other formats, like html or pdf. See [the Quarto documentation](https://quarto.org/) for other formats.
-
-
-```{r, echo=FALSE, message=FALSE}
-# load a few R packages
+```{r}
+#Load packages and data
 library(here)
 library(knitr)
+library(tidyverse)
+library(haven)
+library(Hmisc)
+library(psych)
+library(survival)
+library(survminer)
+
+data_location <- here::here("SEER.csv")
+seer1 <- read.csv(data_location)
+
+attach(seer1)
 ```
 
 

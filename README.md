@@ -1,5 +1,7 @@
 # Overview
 
+This is Ranni Tewfik class project repository.
+
 A template file and folder structure for a data analysis project/paper done with R/Quarto/Github. 
 
 # Pre-requisites
