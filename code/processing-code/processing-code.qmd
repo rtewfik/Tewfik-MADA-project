@@ -1,0 +1,122 @@
+---
+title: "Processing Code"
+author: "Ranni Tewfik"
+date: "02/23/2024"
+output: html_document
+---
+
+
+# Processing Script
+
+This processing script loads the raw data, processes and cleans it, and saves it as an Rds file in the processed-data folder.
+
+
+# Load and Check Raw Data
+
+```{r}
+# Load required packages
+library(here)
+library(dplyr)
+
+# Load raw data
+seer1 <- read.csv(here("data/raw-data/SEER.csv"))
+
+# Summary of raw data
+glimpse(seer1)
+summary(seer1)
+head(seer1)
+```
+
+
+The raw dataset has 1,048,575 observations and 5 variables: "race", "age", "stage", "survival_months", and "vital_status". All variables are character class.
+
+
+# Explore Raw Data
+
+```{r}
+# Attach raw data
+attach(seer1)
+
+# Get frequencies of categorical variable "race"
+table(race, useNA = "always")
+
+# Get frequencies of categorical variable "age" 
+table(age, useNA = "always")
+
+# Get frequencies of categorical variable "stage" 
+table(stage, useNA = "always")
+
+# Get frequencies of categorical variable "vital_status" 
+table(vital_status, useNA = "always")
+
+# Convert "survival_months" variable into numeric class and get summary of the variable
+survival_months <- as.numeric(survival_months)
+summary(survival_months)
+```
+
+
+There are six categories for the "race" variable: "Hispanic (All Races)", "Non-Hispanic White", "Non-Hispanic Black", "Non-Hispanic Asian or Pacific Islander", "Non-Hispanic American Indian/Alaska Native", and "Non-Hispanic Unknown Race." There are no missing data for the "race" variable.
+
+There are 19 categories for the "age" variable: "00 years", "01-04 years", "05-09 years", "10-14 years", "15-19 years", "20-24 years", "25-29 years", "30-34 years", "35-39 years", "40-44 years", "45-49 years", "50-54 years", "55-59 years", "60-64 years", "65-69 years", "70-74 years", "75-79 years", "80-84 years", and "85+ years". There are no missing data for the "age" variable. 
+
+There are six categories for the "stage" variable: "Blank(s)", "Distant", "In situ", "Localized", "Regional", and "Unknown/unstaged". There are no missing data for the "stage" variable.
+
+There are two categories for the "vital_status" variable: "Alive" and "Dead". There are no missing data for the "vital_status" variable.
+
+For the "survival_months" variable, the mean is 88.46 months, the minimum is 0 months, and the maximum is 227 months. There are 8,217 observations with missing data for the "survival_months" variable.
+
+
+# Clean Raw Data
+
+```{r}
+# Create a new dataset from the raw data that does not include observations with missing data for "survival_months"; includes only "Localized", "Regional", and "Distant" categories for "stage"; and creates a new "death" variable from "vital_status" in which "death" = 1 if "vital_status" = "Dead" and "death" = 0 if "vital_status" = "Alive"
+seer2 <- seer1 %>% 
+  filter((survival_months != "Unknown") & (stage == "Localized" | stage == "Regional" | stage == "Distant")) %>%
+  mutate(death = ifelse(vital_status == "Dead", 1, 0))
+
+# Create a new variable "ethnicity" in the new dataset that uses the categories in the "race" variable and groups them into five new categories: "White", "Black", "Asian", "Hispanic", and "Other"
+seer2$ethnicity <- ifelse(seer2$race == "Non-Hispanic White", "White", 
+                         ifelse(seer2$race == "Non-Hispanic Black", "Black", 
+                                ifelse(seer2$race == "Non-Hispanic Asian or Pacific Islander", "Asian", 
+                                       ifelse(seer2$race == "Hispanic (All Races)", "Hispanic", 
+                                              ifelse(seer2$race == "Non-Hispanic American Indian/Alaska Native" | seer2$race == "Non-Hispanic Unknown Race", "Other", NA)))))
+
+# Create a new variable "agegroup" in the new dataset that uses the categories in the "age" variable and groups them into five new categories: "0-49 years", "50-59 years", "60-69 years", "70-79 years", and "80+ years"
+seer2$agegroup <- ifelse(is.na(seer2$age), NA,
+                         ifelse(seer2$age == "50-54 years" | seer2$age == "55-59 years", "50-59 years",
+                                ifelse(seer2$age == "60-64 years" | seer2$age == "65-69 years", "60-69 years",
+                                       ifelse(seer2$age == "70-74 years" | seer2$age == "75-79 years", "70-79 years",
+                                              ifelse(seer2$age == "80-84 years" | seer2$age == "85+ years", "80+ years", "0-49 years")))))
+
+# Create a new numeric variable "survival_time" in the new dataset from the variable "survival_months"
+seer2$survival_time <- seer2$survival_months
+seer2$survival_time <- as.numeric(seer2$survival_time)
+
+# Convert the variables "ethnicity", "agegroup", "stage", and "death" to factor class
+seer2$ethnicity <- as.factor(seer2$ethnicity)
+seer2$agegroup <- as.factor(seer2$agegroup)
+seer2$stage <- as.factor(seer2$stage)
+seer2$death <- as.factor(seer2$death)
+
+# Keep only the following variables in the new dataset: "ethnicity", "agegroup", "stage", "survival_time",  and "death"
+seer <- subset(seer2, select = c(ethnicity, agegroup, stage, survival_time, death))
+
+# Summary of processed data
+glimpse(seer)
+summary(seer)
+head(seer)
+```
+
+
+After processing the raw dataset to remove missing observations for "survival_months" (represented as "survival_time" in the processed dataset) and only including the "Localized", "Regional", and "Distant" categories for the "stage" variable, the processed dataset has 776,196 observations and 5 variables: "ethnicity", "agegroup", "stage", "survival_time", and "death". The variable "survival_time" is numeric class, the variable "death" is factor class, and the remaining variables are character class.
+
+
+# Save Processed Data
+
+```{r}
+saveRDS(seer, file = here("data/processed-data/processeddata.rds"))
+```
+
+
+The processed data ("processeddata.rds") can be found in the "processed-data" folder.
+

@@ -1,0 +1,80 @@
+---
+title: "Statistical Analysis"
+author: "Ranni Tewfik"
+date: "02/23/2024"
+output: html_document
+---
+
+  
+# Statistical Analysis
+
+This statistical analysis script loads the processed data and does statistical analysis.
+
+
+# Load and Check Processed Data
+
+```{r}
+# Load required packages
+library(here)
+library(dplyr)
+library(skimr)
+library(survival)
+library(survminer)
+library(ggplot2)
+library(tidyverse)
+library(gtsummary)
+
+# Load processed data
+seer <- readRDS(here("data/processed-data/processeddata.rds"))
+
+# Attach processed data
+attach(seer)
+
+# Summary of processed data
+glimpse(seer)
+summary(seer)
+head(seer)
+```
+
+
+# Part 1
+
+```{r}
+######################################
+#Data fitting/statistical analysis
+######################################
+
+############################
+#### First model fit
+# fit linear model using height as outcome, weight as predictor
+
+lmfit1 <- lm(Height ~ Weight, mydata)  
+
+# place results from fit into a data frame with the tidy function
+lmtable1 <- broom::tidy(lmfit1)
+
+#look at fit results
+print(lmtable1)
+
+# save fit results table  
+table_file1 = here("results", "resulttable1.rds")
+saveRDS(lmtable1, file = table_file1)
+
+############################
+#### Second model fit
+# fit linear model using height as outcome, weight and gender as predictor
+
+lmfit2 <- lm(Height ~ Weight + Gender, mydata)  
+
+# place results from fit into a data frame with the tidy function
+lmtable2 <- broom::tidy(lmfit2)
+
+#look at fit results
+print(lmtable2)
+
+# save fit results table  
+table_file2 = here("results", "resulttable2.rds")
+saveRDS(lmtable2, file = table_file2)
+```
+
+

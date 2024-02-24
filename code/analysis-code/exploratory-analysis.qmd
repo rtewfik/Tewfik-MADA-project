@@ -1,0 +1,156 @@
+---
+title: "Exploratory Analysis"
+author: "Ranni Tewfik"
+date: "02/23/2024"
+output: html_document
+---
+
+  
+# Exploratory Analysis
+
+This exploratory analysis script loads the processed data and explores the five variables in the dataset.
+
+
+# Load and Check Processed Data
+
+```{r}
+# Load required packages
+library(here)
+library(dplyr)
+library(skimr)
+library(survival)
+library(survminer)
+library(ggplot2)
+library(tidyverse)
+library(gtsummary)
+
+# Load processed data
+seer <- readRDS(here("data/processed-data/processeddata.rds"))
+
+# Attach processed data
+attach(seer)
+
+# Summary of processed data
+glimpse(seer)
+summary(seer)
+head(seer)
+```
+
+
+# Data Exploration - Tables
+
+```{r}
+# Frequency and proportion tables of "ethnicity" variable
+table(ethnicity, useNA = "always")
+prop.table(table(ethnicity))
+
+# Frequency and proportion tables of "agegroup" variable
+table(agegroup, useNA = "always")
+prop.table(table(agegroup))
+
+# Frequency and proportion tables of "stage" variable
+table(stage, useNA = "always")
+prop.table(table(stage))
+
+# Frequency and proportion tables of "death" variable
+table(death, useNA = "always")
+prop.table(table(death))
+
+# Summary of "survival_time" variable
+summary(survival_time)
+
+# Create a summary table of the data
+summary_seer <- skim(seer)
+print(summary_seer)
+
+# Save the summary table
+saveRDS(summary_seer, file = here("results/tables/summarytable.rds"))
+```
+
+
+A summary table of the data ("summarytable.rds") can be found in the "tables" folder.
+
+
+# Table 1 - Study sample characteristics
+
+```{r}
+# Create Table 1 (study sample characteristics) from the data
+table1 <- seer %>% tbl_summary(by = ethnicity, 
+                               statistic = list(all_continuous() ~ "{mean} ({sd})"),
+                               label = c(agegroup ~ "Age at diagnosis (years)", stage ~ "Cancer stage at diagnosis",      
+                               survival_time ~ "Survival time (months)", death ~ "Vital status")) %>%
+                   modify_caption("Table 1. Study sample characteristics of males in the U.S. with prostate cancer by race                                   and ethnicity.")
+
+# Save the summary table
+saveRDS(table1, file = here("results/tables/table1.rds"))
+```
+
+
+Table 1 of the study sample characteristics ("table1.rds") can be found in the "tables" folder.
+
+
+# Table 2 - Kaplan-Meier survival
+```{r}
+# Create Table 2 (Kaplan-Meier 1-year, 5-year, and 10-year survival from the data)
+## Overall survival
+summary(survfit(Surv(survival_time, death) ~ 1), times <- c(12, 60, 120))
+
+## Survival by "ethnicity"
+summary(survfit(Surv(survival_time, death) ~ ethnicity), times <- c(12, 60, 120))
+survdiff(Surv(survival_time, death) ~ ethnicity)
+
+## Survival by "agegroup"
+summary(survfit(Surv(survival_time, death) ~ agegroup), times <- c(12, 60, 120))
+survdiff(Surv(survival_time, death) ~ agegroup)
+
+## Survival by "stage"
+summary(survfit(Surv(survival_time, death) ~ stage), times <- c(12, 60, 120))
+survdiff(Surv(survival_time, death) ~ stage)
+```
+
+
+# Data Exploration - Figures
+
+```{r}
+survtime_hist <- seer %>% ggplot(aes(x = survival_time)) + geom_histogram() 
+plot(survtime_hist)
+
+ggsave(filename = here("results/figures/survtime_distribution.png"), plot = survtime_hist) 
+```
+
+A histogram of the distribution of the "survival_time" variable ("survtime_distribution.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create a Kaplan-Meier survival curve stratified by ethnicity
+plot(survfit(Surv(survival_time, death) ~ ethnicity), 
+     col = c("red", "blue", "limegreen", "orange", "magenta"),
+     xlab = "Survival Time (Months)",
+     ylab = "Survival Probability")
+
+legend(x = "topleft", legend = c("Non-Hispanic White", "Non-Hispanic Black", "Non-Hispanic Asian or Pacific Islander", "Hispanic (All Races)", "Other"),
+       lty = c(1, 1, 1, 1, 1),
+       col = c("magenta", "blue", "red", "limegreen", "orange"))
+
+title("Kaplan-Meier Survival Estimates")
+
+# Save the Kaplan-Meier survival curve 
+png(here("results/figures/survivalcurve.png"))
+
+plot(survfit(Surv(survival_time, death) ~ ethnicity), 
+     col = c("red", "blue", "limegreen", "orange", "magenta"),
+     xlab = "Survival Time (Months)",
+     ylab = "Survival Probability")
+
+legend(x = "topleft", legend = c("Non-Hispanic White", "Non-Hispanic Black", "Non-Hispanic Asian or Pacific Islander", "Hispanic (All Races)", "Other"),
+       lty = c(1, 1, 1, 1, 1),
+       col = c("magenta", "blue", "red", "limegreen", "orange"))
+
+title("Kaplan-Meier Survival Estimates")
+
+dev.off()
+```
+
+
+A Kaplan-Meier survival curve stratified by ethnicity ("survivalcurve.png") can be found in the "figures" folder.
+
