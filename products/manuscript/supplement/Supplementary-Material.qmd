@@ -1,8 +1,8 @@
 ---
-title: "Supplement to Example Manuscript Template for a Data Analysis Project"
+title: "Supplementary Material"
 
 subtitle: ""
-author: Andreas Handel
+author: Ranni Tewfik
 date: "`r Sys.Date()`"
 format:
   pdf:

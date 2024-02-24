@@ -9,149 +9,65 @@ format:
     highlight-style: github
 ---
 
-```{r}
-#Load packages and data
-library(here)
-library(knitr)
-library(tidyverse)
-library(haven)
-library(Hmisc)
-library(psych)
-library(survival)
-library(survminer)
+# Introduction
 
-seer1 <- read.csv("SEER.csv")
-
-attach(seer1)
-```
-
-
-
-# Summary/Abstract
-
-Research Question
-
-Among males diagnosed with prostate cancer, are race and ethnicity associated with time to all-cause mortality?
-
-Background
-
-Because of the discrepancies in the literature regarding the relationship between race/ethnicity and mortality among patients with prostate cancer, one of the motivations for this project is to better understand that relationship using a large national registry of prostate cancer patients. This project is different from what has already been done because other studies have used smaller sample sizes or have not included several racial and ethnic groups in the study population. 
-
-Data Source
-
-The Surveillance, Epidemiology, and End Results (SEER) Program of the National Cancer Institute (NCI) provides information on cancer incidence and survival in the United States. SEER uses population-based cancer registries that cover about half of the national population. The SEER registries collect data on tumor site and morphology, stage at diagnosis, treatment, vital status, and patient demographics, including race and ethnicity. This project will use the SEER*Stat software (version 8.4.2) to access the SEER 18 (2000-2018) Registry for data on 1,048,575 prostate cancer patients (i.e, observations).
-
-Study Design 
-
-The data registry is based on a prospective cohort study that investigated male patients with prostate cancer in the U.S. from 2000 to 2018. All ages and races/ethnicities will be included in this project, however, only patients with localized, regional, or distant cancer stage at diagnosis will be included. Patients with unknown/missing survival time will be excluded.
-
-Covariates
-
-The main outcome of interest is all-cause mortality. The main exposure of interest is race/ethnicity, which includes the following categories: “Non-Hispanic White”, “Non-Hispanic Black”, “Non-Hispanic Asian or Pacific Islander”, “Hispanic (all races)”, and “Other”. The other covariates, age at diagnosis and cancer stage at diagnosis, are categorical variables.
-
-Statistical Analysis
-
-All analyses will be conducted using R software (version 4.3.1). Survival analysis will be performed for Kaplan-Meier survival estimates and curves. Cox regression will be used to compute adjusted hazard ratios and 95% confidence intervals. The Cox proportional hazards assumption will be tested using log-log survival curves and extended Cox models for each covariate.
-
-
-```{r}
-#Get an overview and summary of raw data
-str(seer1)
-summary(seer1)
-
-#Descriptive analysis of raw data
-table(race, useNA = "always")
-table(age, useNA = "always")
-table(stage, useNA = "always")
-table(vital_status, useNA = "always")
-survival_months <- as.numeric(survival_months)
-summary(survival_months)
-```
-
+Because of the discrepancies in the literature regarding the relationship between race/ethnicity and mortality among patients with prostate cancer, one of the motivations for this project is to better understand that relationship using a large national registry of prostate cancer patients. This project is different from what has already been done because other studies have used smaller sample sizes or have not included several racial and ethnic groups in the study population. Therefore, the research question for this project is: Among males diagnosed with prostate cancer, are race and ethnicity associated with time to all-cause mortality?
 
 {{< pagebreak >}}
 
+# Methods
 
-# Introduction 
+## Data Source
 
-## General Background Information
-_Provide enough background on your topic that others can understand the why and how of your analysis_ 
+The Surveillance, Epidemiology, and End Results (SEER) Program of the National Cancer Institute (NCI) provides information on cancer incidence and survival in the United States. SEER uses population-based cancer registries that cover about half of the national population. The SEER registries collect data on tumor site and morphology, stage at diagnosis, treatment, vital status, and patient demographics, including race and ethnicity. This project used the SEER\*Stat software (version 8.4.2) to access the SEER 18 (2000-2018) Registry for data on 1,048,575 prostate cancer patients.
 
-## Description of data and data source
-_Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
+## Project Design
 
-## Questions/Hypotheses to be addressed
-_State the research questions you plan to answer with this analysis._
+This project investigated male patients with prostate cancer in the U.S. from 2000 to 2018. All ages and races/ethnicities were included in the study, however, only patients with localized, regional, or distant cancer stage at diagnosis were included. Patients with unknown/missing survival time were excluded.
 
-To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the bibtex file specified in the YAML header above (here `dataanalysis_template_references.bib`) and have the right bibtex key. Then you can include like this:
+## Covariates
 
-Examples of reproducible research projects can for instance be found in [@mckay2020; @mckay2020a].
+The main outcome of interest was all-cause mortality. The main exposure of interest was race/ethnicity, which included the following categories: “Non-Hispanic White”, “Non-Hispanic Black”, “Non-Hispanic Asian or Pacific Islander”, “Hispanic (all races)”, and “Other”. The other covariates, age at diagnosis and cancer stage at diagnosis, were categorical variables. The age groups were coded as “0-49 years”, “50-59 years”, “60-69 years”, “70-79 years”, and “≥ 80 years”. The categories for stage at diagnosis were “localized” (i.e., cancer is limited to where it originated), “regional” (i.e., cancer has spread to nearby lymph nodes, tissues, or organs), and “distant” (i.e., cancer has spread to distant body parts).
 
+## Statistical Analysis
 
-
-{{< pagebreak >}}
-
-
-# Methods 
-
-_Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement._
-
-
-## Schematic of workflow
-
-Sometimes you might want to show a schematic diagram/figure that was not created with code (if you can do it with code, do it). fig-schematic is an example of some - completely random/unrelated - schematic that was generated with Biorender.
-We store those figures in the `assets` folder.
-
-```{r}
-#| label: fig-schematic
-#| fig-cap: "A figure that is manually generated and shows some overview/schematic. This has nothing to do with the data, it's just a random one from one of our projects I found and placed here."
-#| echo: FALSE
-#knitr::include_graphics(here("products","assets","antigen-recognition.png"))
-```
-
-
-
-
-## Data aquisition
-_As applicable, explain where and how you got the data. If you directly import the data from an online source, you can combine this section with the next._
-
-
-## Data import and cleaning
-_Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along._
-
-
-## Statistical analysis
-_Explain anything related to your statistical analyses._
-
+All analyses were conducted using R software (version 4.3.1). Survival analysis was performed for Kaplan-Meier survival estimates and curves. Cox regression was used to compute adjusted hazard ratios and 95% confidence intervals. The Cox proportional hazards assumption was tested using log-log survival curves and extended Cox models for each covariate.
 
 {{< pagebreak >}}
-
 
 # Results
 
 ## Exploratory/Descriptive analysis
 
-_Use a combination of text/tables/figures to explore and describe your data. Show the most important descriptive results here. Additional ones should go in the supplement. Even more can be in the R and Quarto files that are part of your project._
-
-
-tbl-summarytable shows a summary of the data.
-
-Note the loading of the data providing a **relative** path using the `../../` notation. (Two dots means a folder up). You never want to specify an **absolute** path like `C:\ahandel\myproject\results\` because if you share this with someone, it won't work for them since they don't have that path. You can also use the `here` R package to create paths. See examples of that below.
+This project included 776,196 males in the U.S. with prostate cancer from the SEER database. Of these, 540,057 (69.6%) were Non-Hispanic White; 526,468 (67.8%) were age 60-79 years at diagnosis; and 629,222 (81.1%) had localized stage of prostate cancer at diagnosis (Table 1).
 
 ```{r}
-#| label: tbl-summarytable
-#| tbl-cap: "Data summary table."
+#| label: Table1
+#| tbl-cap: "Table 1. Study sample characteristics of males in the U.S. with prostate cancer by race and ethnicity."
 #| echo: FALSE
-#resulttable=readRDS("../../results/summarytable.rds")
-#knitr::kable(resulttable)
+library(here)
+library(knitr)
+Table1 <- readRDS(here("results/tables/table1.rds"))
+kable(Table1)
 ```
 
+The histogram for survival time in months shows a right-skewed (positively skewed) distribution in which the mean is greater than the median (Figure 1). In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5%. Non-Hispanic Black males had lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2).
+
+Figure 1. Histogram of survival time distribution in months.
+```{r}
+include_graphics("../../results/figures/survtime_distribution.png")
+```
+
+
+Figure 2. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by race and ethnicity.
+```{r}
+include_graphics("../../results/figures/survivalcurve.png")
+```
 
 
 ## Basic statistical analysis
 
-_To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p<0.05 means statistical significance" interpretation is not valid._
-
+*To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p\<0.05 means statistical significance" interpretation is not valid.*
 
 fig-result shows a scatterplot figure produced by one of the R scripts.
 
@@ -162,10 +78,9 @@ fig-result shows a scatterplot figure produced by one of the R scripts.
 #knitr::include_graphics(here("results","height-weight-stratified.png"))
 ```
 
-
 ## Full analysis
 
-_Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here._
+*Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here.*
 
 Example tbl-resulttable2 shows a summary of a linear model fit.
 
@@ -177,33 +92,30 @@ Example tbl-resulttable2 shows a summary of a linear model fit.
 #knitr::kable(resulttable2)
 ```
 
-
 {{< pagebreak >}}
-
 
 # Discussion
 
 ## Summary and Interpretation
-_Summarize what you did, what you found and what it means._
+
+*Summarize what you did, what you found and what it means.*
 
 ## Strengths and Limitations
-_Discuss what you perceive as strengths and limitations of your analysis._
+
+*Discuss what you perceive as strengths and limitations of your analysis.*
 
 ## Conclusions
-_What are the main take-home messages?_
 
-_Include citations in your Rmd file using bibtex, the list of references will automatically be placed at the end_
+*What are the main take-home messages?*
 
-This paper [@leek2015] discusses types of analyses. 
+*Include citations in your Rmd file using bibtex, the list of references will automatically be placed at the end*
 
-These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template. 
+This paper [@leek2015] discusses types of analyses.
+
+These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template.
 
 Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header. Many more style files for almost any journal [are available](https://www.zotero.org/styles). You also specify the location of your bibtex reference file in the YAML. You can call your reference file anything you like, I just used the generic word `references.bib` but giving it a more descriptive name is probably better.
-
 
 {{< pagebreak >}}
 
 # References
-
-
-
