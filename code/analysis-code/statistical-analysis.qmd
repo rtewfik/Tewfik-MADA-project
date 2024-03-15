@@ -1,7 +1,7 @@
 ---
 title: "Statistical Analysis"
 author: "Ranni Tewfik"
-date: "02/23/2024"
+date: "03/15/2024"
 output: html_document
 ---
 
@@ -23,6 +23,8 @@ library(survminer)
 library(ggplot2)
 library(tidyverse)
 library(gtsummary)
+library(car)
+library(broom)
 
 # Load processed data
 seer <- readRDS(here("data/processed-data/processeddata.rds"))
@@ -37,44 +39,72 @@ head(seer)
 ```
 
 
-# Part 1
+# Proportional Hazards Assessment
 
 ```{r}
-######################################
-#Data fitting/statistical analysis
-######################################
+# Create a log-log survival curve for "ethnicity"
+plot(survfit(Surv(survival_time, death) ~ ethnicity), fun = "cloglog")
 
-############################
-#### First model fit
-# fit linear model using height as outcome, weight as predictor
+# Save the log-log survival curve for "ethnicity"
+png(here("results/figures/loglogcurve_ethnicity.png"))
+plot(survfit(Surv(survival_time, death) ~ ethnicity), fun = "cloglog")
+dev.off()
 
-lmfit1 <- lm(Height ~ Weight, mydata)  
+# Create a log-log survival curve for "agegroup"
+plot(survfit(Surv(survival_time, death) ~ agegroup), fun = "cloglog")
 
-# place results from fit into a data frame with the tidy function
-lmtable1 <- broom::tidy(lmfit1)
+# Save the log-log survival curve for "agegroup"
+png(here("results/figures/loglogcurve_age.png"))
+plot(survfit(Surv(survival_time, death) ~ agegroup), fun = "cloglog")
+dev.off()
 
-#look at fit results
-print(lmtable1)
+# Create a log-log survival curve for "stage"
+plot(survfit(Surv(survival_time, death) ~ stage), fun = "cloglog")
 
-# save fit results table  
-table_file1 = here("results", "resulttable1.rds")
-saveRDS(lmtable1, file = table_file1)
-
-############################
-#### Second model fit
-# fit linear model using height as outcome, weight and gender as predictor
-
-lmfit2 <- lm(Height ~ Weight + Gender, mydata)  
-
-# place results from fit into a data frame with the tidy function
-lmtable2 <- broom::tidy(lmfit2)
-
-#look at fit results
-print(lmtable2)
-
-# save fit results table  
-table_file2 = here("results", "resulttable2.rds")
-saveRDS(lmtable2, file = table_file2)
+# Save the log-log survival curve for "stage"
+png(here("results/figures/loglogcurve_stage.png"))
+plot(survfit(Surv(survival_time, death) ~ stage), fun = "cloglog")
+dev.off()
 ```
 
+
+The log-log survival curves to test the proportional-hazards assumption for the Cox proportional-hazards model can be found in the "figures" folder.
+
+
+```{r}
+# Fit the Cox proportional-hazards model using "ethnicity" as the predictor 
+simple_model <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(ethnicity), ref = "White"), data = seer, method = "breslow")
+summary(simple_model)
+
+# Place the results from the model fitting into a data frame with the tidy function
+simple_model_table <- tidy(simple_model)
+
+# Look at the table with the results from the model fitting
+print(simple_model_table)
+
+# Save the table with the results from the model fitting 
+saveRDS(simple_model_table, file = here("results/tables/simple_model_table.rds"))
+```
+
+
+The results from the model fitting using only "ethnicity" as the predictor ("simple_model_table.rds") can be found in the "tables" folder.
+
+
+```{r}
+# Fit the Cox proportional-hazards model using "ethnicity", "agegroup", and "stage" as the predictors
+full_model <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(ethnicity), ref = "White") + relevel(factor(agegroup), ref = "0-49 years") + relevel(factor(stage), ref = "Localized"), data = seer, method = "breslow")
+summary(full_model)
+
+# Place the results from the model fitting into a data frame with the tidy function
+full_model_table <- tidy(full_model)
+
+# Look at the table with the results from the model fitting
+print(full_model_table)
+
+# Save the table with the results from the model fitting 
+saveRDS(full_model_table, file = here("results/tables/full_model_table.rds"))
+```
+
+
+The results from the model fitting using "ethnicity", "agegroup", and "stage" as the predictors ("full_model_table.rds") can be found in the "tables" folder.
 

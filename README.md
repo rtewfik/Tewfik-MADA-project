@@ -27,6 +27,7 @@ Load the following R packages before running any code:
 * tidyverse
 * gtsummary
 * knitr
+* car
 
 
 # Project Folders
@@ -49,5 +50,5 @@ The exploratory analysis script `exploratory-analysis.qmd` in the `code/analysis
 
 # Statistical Analysis
 
-The statistical analysis script `statistical-analysis.qmd` in the `code/analysis-code` folder is run to load the processed data and do statistical analysis. This section will be updated soon.
+The statistical analysis script `statistical-analysis.qmd` in the `code/analysis-code` folder is run to load the processed data and do statistical analysis, including assessment of the proportional hazards assumption and fitting Cox proportional-hazards models. The results of the statistical analysis are saved in the `results/tables` and `results/figures` folders.
 

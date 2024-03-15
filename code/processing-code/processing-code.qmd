@@ -1,7 +1,7 @@
 ---
 title: "Processing Code"
 author: "Ranni Tewfik"
-date: "02/23/2024"
+date: "03/12/2024"
 output: html_document
 ---
 
@@ -28,7 +28,7 @@ head(seer1)
 ```
 
 
-The raw dataset has 1,048,575 observations and 5 variables: "race", "age", "stage", "survival_months", and "vital_status". All variables are character class.
+The raw dataset has 1,048,575 observations and 7 variables: "race", "age", "stage", "survival_months", "vital_status", "education", and "family_history". All variables are character class.
 
 
 # Explore Raw Data
@@ -49,6 +49,12 @@ table(stage, useNA = "always")
 # Get frequencies of categorical variable "vital_status" 
 table(vital_status, useNA = "always")
 
+# Get frequencies of categorical variable "education" 
+table(education, useNA = "always")
+
+# Get frequencies of categorical variable "family_history" 
+table(family_history, useNA = "always")
+
 # Convert "survival_months" variable into numeric class and get summary of the variable
 survival_months <- as.numeric(survival_months)
 summary(survival_months)
@@ -62,6 +68,10 @@ There are 19 categories for the "age" variable: "00 years", "01-04 years", "05-0
 There are six categories for the "stage" variable: "Blank(s)", "Distant", "In situ", "Localized", "Regional", and "Unknown/unstaged". There are no missing data for the "stage" variable.
 
 There are two categories for the "vital_status" variable: "Alive" and "Dead". There are no missing data for the "vital_status" variable.
+
+There are three categories for the "education" variable: "high school or less", "some college", and "college or higher". There are no missing data for the "education" variable.
+
+There are two categories for the "family_history" variable: "yes" and "no". There are no missing data for the "family_history" variable.
 
 For the "survival_months" variable, the mean is 88.46 months, the minimum is 0 months, and the maximum is 227 months. There are 8,217 observations with missing data for the "survival_months" variable.
 
@@ -92,14 +102,16 @@ seer2$agegroup <- ifelse(is.na(seer2$age), NA,
 seer2$survival_time <- seer2$survival_months
 seer2$survival_time <- as.numeric(seer2$survival_time)
 
-# Convert the variables "ethnicity", "agegroup", "stage", and "death" to factor class
+# Convert the variables "ethnicity", "agegroup", "stage", "death", "education", and "family_history" to factor class
 seer2$ethnicity <- as.factor(seer2$ethnicity)
 seer2$agegroup <- as.factor(seer2$agegroup)
 seer2$stage <- as.factor(seer2$stage)
 seer2$death <- as.factor(seer2$death)
+seer2$education <- as.factor(seer2$education)
+seer2$family_history <- as.factor(seer2$family_history)
 
-# Keep only the following variables in the new dataset: "ethnicity", "agegroup", "stage", "survival_time",  and "death"
-seer <- subset(seer2, select = c(ethnicity, agegroup, stage, survival_time, death))
+# Keep only the following variables in the new dataset: "ethnicity", "agegroup", "stage", "education", "family_history", "survival_time",  and "death"
+seer <- subset(seer2, select = c(ethnicity, agegroup, stage, education, family_history, survival_time, death))
 
 # Summary of processed data
 glimpse(seer)

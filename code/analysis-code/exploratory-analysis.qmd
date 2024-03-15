@@ -1,14 +1,14 @@
 ---
 title: "Exploratory Analysis"
 author: "Ranni Tewfik"
-date: "02/23/2024"
+date: "03/12/2024"
 output: html_document
 ---
 
   
 # Exploratory Analysis
 
-This exploratory analysis script loads the processed data and explores the five variables in the dataset.
+This exploratory analysis script loads the processed data and explores the 7 variables in the dataset.
 
 
 # Load and Check Processed Data
@@ -23,6 +23,7 @@ library(survminer)
 library(ggplot2)
 library(tidyverse)
 library(gtsummary)
+library(car)
 
 # Load processed data
 seer <- readRDS(here("data/processed-data/processeddata.rds"))
@@ -52,6 +53,14 @@ prop.table(table(agegroup))
 table(stage, useNA = "always")
 prop.table(table(stage))
 
+# Frequency and proportion tables of "education" variable
+table(education, useNA = "always")
+prop.table(table(education))
+
+# Frequency and proportion tables of "family_history" variable
+table(family_history, useNA = "always")
+prop.table(table(family_history))
+
 # Frequency and proportion tables of "death" variable
 table(death, useNA = "always")
 prop.table(table(death))
@@ -77,9 +86,12 @@ A summary table of the data ("summarytable.rds") can be found in the "tables" fo
 # Create Table 1 (study sample characteristics) from the data
 table1 <- seer %>% tbl_summary(by = ethnicity, 
                                statistic = list(all_continuous() ~ "{mean} ({sd})"),
-                               label = c(agegroup ~ "Age at diagnosis (years)", stage ~ "Cancer stage at diagnosis",      
+                               label = c(agegroup ~ "Age at diagnosis (years)", stage ~ "Cancer stage at diagnosis",   
+                               education ~ "Educational attainment", family_history ~ "Family history of cancer",      
                                survival_time ~ "Survival time (months)", death ~ "Vital status")) %>%
                    modify_caption("Table 1. Study sample characteristics of males in the U.S. with prostate cancer by race                                   and ethnicity.")
+
+table1
 
 # Save the summary table
 saveRDS(table1, file = here("results/tables/table1.rds"))
@@ -97,24 +109,29 @@ summary(survfit(Surv(survival_time, death) ~ 1), times <- c(12, 60, 120))
 
 ## Survival by "ethnicity"
 summary(survfit(Surv(survival_time, death) ~ ethnicity), times <- c(12, 60, 120))
-survdiff(Surv(survival_time, death) ~ ethnicity)
 
 ## Survival by "agegroup"
 summary(survfit(Surv(survival_time, death) ~ agegroup), times <- c(12, 60, 120))
-survdiff(Surv(survival_time, death) ~ agegroup)
 
 ## Survival by "stage"
 summary(survfit(Surv(survival_time, death) ~ stage), times <- c(12, 60, 120))
-survdiff(Surv(survival_time, death) ~ stage)
+
+## Survival by "education"
+summary(survfit(Surv(survival_time, death) ~ education), times <- c(12, 60, 120))
+
+## Survival by "family_history"
+summary(survfit(Surv(survival_time, death) ~ family_history), times <- c(12, 60, 120))
 ```
 
 
 # Data Exploration - Figures
 
 ```{r}
+# Create a histogram of "survival_time"
 survtime_hist <- seer %>% ggplot(aes(x = survival_time)) + geom_histogram() 
 plot(survtime_hist)
 
+# Save the histogram
 ggsave(filename = here("results/figures/survtime_distribution.png"), plot = survtime_hist) 
 ```
 
@@ -122,35 +139,190 @@ A histogram of the distribution of the "survival_time" variable ("survtime_distr
 
 
 ```{r}
-# Create a Kaplan-Meier survival curve stratified by ethnicity
-plot(survfit(Surv(survival_time, death) ~ ethnicity), 
-     col = c("red", "blue", "limegreen", "orange", "magenta"),
-     xlab = "Survival Time (Months)",
-     ylab = "Survival Probability")
+# Create a boxplot of "death" and "survival_time"
+ggplot(seer, aes(x = factor(death), y = survival_time)) +
+  geom_boxplot() +
+  labs(x = "Death (no vs. yes)", y = "Survival Time (months)", title = "Boxplot of Mortality and Survival Time")
 
-legend(x = "topleft", legend = c("Non-Hispanic White", "Non-Hispanic Black", "Non-Hispanic Asian or Pacific Islander", "Hispanic (All Races)", "Other"),
-       lty = c(1, 1, 1, 1, 1),
-       col = c("magenta", "blue", "red", "limegreen", "orange"))
+# Create a boxplot of "ethnicity" and "survival_time"
+ggplot(seer, aes(x = factor(ethnicity), y = survival_time)) +
+  geom_boxplot() +
+  labs(x = "Ethnicity", y = "Survival Time (months)", title = "Boxplot of Ethnicity and Survival Time")
 
-title("Kaplan-Meier Survival Estimates")
+# Create a boxplot of "agegroup" and "survival_time"
+ggplot(seer, aes(x = factor(agegroup), y = survival_time)) +
+  geom_boxplot() +
+  labs(x = "Age Group", y = "Survival Time (months)", title = "Boxplot of Age Groups and Survival Time")
 
-# Save the Kaplan-Meier survival curve 
-png(here("results/figures/survivalcurve.png"))
+# Create a boxplot of "stage" and "survival_time"
+ggplot(seer, aes(x = factor(stage), y = survival_time)) +
+  geom_boxplot() +
+  labs(x = "Cancer Stage", y = "Survival Time (months)", title = "Boxplot of Cancer Stage and Survival Time")
 
-plot(survfit(Surv(survival_time, death) ~ ethnicity), 
-     col = c("red", "blue", "limegreen", "orange", "magenta"),
-     xlab = "Survival Time (Months)",
-     ylab = "Survival Probability")
+# Create a boxplot of "education" and "survival_time"
+ggplot(seer, aes(x = factor(education), y = survival_time)) +
+  geom_boxplot() +
+  labs(x = "Education", y = "Survival Time (months)", title = "Boxplot of Education and Survival Time")
 
-legend(x = "topleft", legend = c("Non-Hispanic White", "Non-Hispanic Black", "Non-Hispanic Asian or Pacific Islander", "Hispanic (All Races)", "Other"),
-       lty = c(1, 1, 1, 1, 1),
-       col = c("magenta", "blue", "red", "limegreen", "orange"))
-
-title("Kaplan-Meier Survival Estimates")
-
-dev.off()
+# Create a boxplot of "family_history" and "survival_time"
+ggplot(seer, aes(x = factor(family_history), y = survival_time)) +
+  geom_boxplot() +
+  labs(x = "Family History", y = "Survival Time (months)", title = "Boxplot of Family History and Survival Time")
 ```
 
 
-A Kaplan-Meier survival curve stratified by ethnicity ("survivalcurve.png") can be found in the "figures" folder.
+```{r}
+# Create a boxplot of "death" and "survival_time", stratified by "ethnicity"
+death_survtime_ethnicity_box <- seer %>% ggplot(aes(x = factor(death), y = survival_time, fill = ethnicity)) +
+  geom_boxplot() +
+  labs(x = "Death (no vs. yes)", y = "Survival Time (months)", title = "Boxplot of Mortality and Survival Time, Stratified by Ethnicity")
+
+# Save the boxplot
+ggsave(filename = here("results/figures/death_survtime_ethnicity_boxplot.png"), plot = death_survtime_ethnicity_box) 
+```
+
+
+Boxplots of the distribution of the "survival_time" variable for "death" (no vs. yes), stratified by "ethnicity" ("death_survtime_ethnicity_boxplot.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create a bar chart of "ethnicity" and "survival_time", stratified by "death"
+ethnicity_survtime_death_bar <- seer %>% ggplot(aes(x = factor(ethnicity), y = survival_time, fill = death)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(x = "Ethnicity", y = "Survival Time (months)", fill = "Death (no vs. yes)", title = "Bar Chart of Ethnicity and Survival Time, Stratified by Death")
+
+# Save the bar chart
+ggsave(filename = here("results/figures/ethnicity_survtime_death_barchart.png"), plot = ethnicity_survtime_death_bar) 
+```
+
+
+Bar charts of the frequency of the "survival_time" variable for "ethnicity", stratified by "death" (no vs. yes) ("ethnicity_survtime_death_barchart.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create residual plots
+model <- lm(survival_time ~ death + ethnicity + agegroup + stage + education + family_history, data = seer)
+residualPlots(model)
+```
+
+
+```{r}
+# Create an overall Kaplan-Meier survival curve
+seer$death <- as.numeric(seer$death)
+
+fit <- survfit(Surv(survival_time, death) ~ 1, data = seer)
+
+survplot <- ggsurvplot(fit, data = seer, 
+                       censor.size = 0.1, 
+                       size = 0.2, 
+                       ylim = c(0.50, 1.00)) +
+  labs(x = "Survival Time (months)", y = "Survival Probability", title = "Kaplan-Meier Survival Estimates")
+
+# Save the Kaplan-Meier survival curve
+ggsave(filename = here("results/figures/survivalcurve_total.png"), plot = survplot$plot) 
+```
+
+
+An overall Kaplan-Meier survival curve ("survivalcurve_total.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create a Kaplan-Meier survival curve stratified by "ethnicity"
+seer$death <- as.numeric(seer$death)
+
+fit <- survfit(Surv(survival_time, death) ~ ethnicity, data = seer)
+
+survplot <- ggsurvplot(fit, data = seer, 
+                       censor.size = 0.1, 
+                       size = 0.2, 
+                       ylim = c(0.50, 1.00), 
+                       legend.labs = c("Asian or Pacific Islander", "Black", "Hispanic", "Other", "White")) +
+  labs(x = "Survival Time (months)", y = "Survival Probability", title = "Kaplan-Meier Survival Estimates, Stratified by Ethnicity")
+
+# Save the Kaplan-Meier survival curve
+ggsave(filename = here("results/figures/survivalcurve_ethnicity.png"), plot = survplot$plot) 
+```
+
+
+A Kaplan-Meier survival curve stratified by "ethnicity" ("survivalcurve_ethnicity.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create a Kaplan-Meier survival curve stratified by "agegroup"
+seer$death <- as.numeric(seer$death)
+
+fit <- survfit(Surv(survival_time, death) ~ agegroup, data = seer)
+
+survplot <- ggsurvplot(fit, data = seer, 
+                       censor.size = 0.1, 
+                       size = 0.2, 
+                       ylim = c(0.50, 1.00)) +
+  labs(x = "Survival Time (months)", y = "Survival Probability", title = "Kaplan-Meier Survival Estimates, Stratified by Age")
+
+# Save the Kaplan-Meier survival curve
+ggsave(filename = here("results/figures/survivalcurve_age.png"), plot = survplot$plot) 
+```
+
+
+A Kaplan-Meier survival curve stratified by "agegroup" ("survivalcurve_age.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create a Kaplan-Meier survival curve stratified by "stage"
+seer$death <- as.numeric(seer$death)
+
+fit <- survfit(Surv(survival_time, death) ~ stage, data = seer)
+
+survplot <- ggsurvplot(fit, data = seer, 
+                       censor.size = 0.1, 
+                       size = 0.2, 
+                       ylim = c(0.50, 1.00)) +
+  labs(x = "Survival Time (months)", y = "Survival Probability", title = "Kaplan-Meier Survival Estimates, Stratified by Stage")
+
+# Save the Kaplan-Meier survival curve
+ggsave(filename = here("results/figures/survivalcurve_stage.png"), plot = survplot$plot) 
+```
+
+
+A Kaplan-Meier survival curve stratified by "stage" ("survivalcurve_stage.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create a Kaplan-Meier survival curve stratified by "education"
+seer$death <- as.numeric(seer$death)
+
+fit <- survfit(Surv(survival_time, death) ~ education, data = seer)
+
+survplot <- ggsurvplot(fit, data = seer, 
+                       censor.size = 0.1, 
+                       size = 0.2, 
+                       ylim = c(0.50, 1.00)) +
+  labs(x = "Survival Time (months)", y = "Survival Probability", title = "Kaplan-Meier Survival Estimates, Stratified by Education")
+
+# Save the Kaplan-Meier survival curve
+ggsave(filename = here("results/figures/survivalcurve_education.png"), plot = survplot$plot) 
+```
+
+
+A Kaplan-Meier survival curve stratified by "education" ("survivalcurve_education.png") can be found in the "figures" folder.
+
+
+```{r}
+# Create a Kaplan-Meier survival curve stratified by "family_history"
+seer$death <- as.numeric(seer$death)
+
+fit <- survfit(Surv(survival_time, death) ~ family_history, data = seer)
+
+survplot <- ggsurvplot(fit, data = seer, 
+                       censor.size = 0.1, 
+                       size = 0.2, 
+                       ylim = c(0.50, 1.00)) +
+  labs(x = "Survival Time (months)", y = "Survival Probability", title = "Kaplan-Meier Survival Estimates, Stratified by Family History")
+
+# Save the Kaplan-Meier survival curve
+ggsave(filename = here("results/figures/survivalcurve_fhx.png"), plot = survplot$plot) 
+```
+
+
+A Kaplan-Meier survival curve stratified by "family_history" ("survivalcurve_fhx.png") can be found in the "figures" folder.
 
