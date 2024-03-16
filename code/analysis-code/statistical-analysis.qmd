@@ -84,10 +84,27 @@ print(simple_model_table)
 
 # Save the table with the results from the model fitting 
 saveRDS(simple_model_table, file = here("results/tables/simple_model_table.rds"))
+
+# Place the exponentiated coefficients (hazard ratios) and confidence intervals from the model fitting into a data frame 
+coxsummary <- summary(simple_model)
+hr <- coxsummary$conf.int
+
+simple_model_table_hr <- data.frame(
+  "Characteristic" = c("Asian", "Black", "Hispanic", "Other"),
+  "Adjusted hazard ratio" = hr[, 1],
+  "95% CI (lower)" = hr[, 3],
+  "95% CI (upper)" = hr[, 4]
+  )
+
+# Look at the table with hazard ratios and confidence intervals
+print (simple_model_table_hr)
+
+# Save the table with hazard ratios and confidence intervals
+saveRDS(simple_model_table_hr, file = here("results/tables/simple_model_table_hr.rds"))
 ```
 
 
-The results from the model fitting using only "ethnicity" as the predictor ("simple_model_table.rds") can be found in the "tables" folder.
+The results from the model fitting using only "ethnicity" as the predictor ("simple_model_table.rds" and ""simple_model_table_hr.rds") can be found in the "tables" folder.
 
 
 ```{r}
@@ -103,8 +120,25 @@ print(full_model_table)
 
 # Save the table with the results from the model fitting 
 saveRDS(full_model_table, file = here("results/tables/full_model_table.rds"))
+
+# Place the exponentiated coefficients (hazard ratios) and confidence intervals from the model fitting into a data frame 
+coxsummary <- summary(full_model)
+hr <- coxsummary$conf.int
+
+full_model_table_hr <- data.frame(
+  "Characteristic" = c("Asian", "Black", "Hispanic", "Other", "50-59 years", "60-69 years", "70-79 year", "80+ years", "Distant", "Regional"),
+  "Adjusted hazard ratio" = hr[, 1],
+  "95% CI (lower)" = hr[, 3],
+  "95% CI (upper)" = hr[, 4]
+  )
+
+# Look at the table with hazard ratios and confidence intervals
+print (full_model_table_hr)
+
+# Save the table with hazard ratios and confidence intervals
+saveRDS(full_model_table_hr, file = here("results/tables/full_model_table_hr.rds"))
 ```
 
 
-The results from the model fitting using "ethnicity", "agegroup", and "stage" as the predictors ("full_model_table.rds") can be found in the "tables" folder.
+The results from the model fitting using "ethnicity", "agegroup", and "stage" as the predictors ("full_model_table.rds" and "full_model_table_hr.rds") can be found in the "tables" folder.
 

@@ -22,6 +22,15 @@ library(knitr)
 
 
 
+The histogram for survival time in months shows a right-skewed (positively skewed) distribution in which the mean is greater than the median (Figure 1). In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5%. Non-Hispanic Black males had lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2).
+
+Figure 1. Histogram of survival time distribution in months.
+```{r}
+include_graphics("../../results/figures/survtime_distribution.png")
+```
+
+
+
 
 This shows some materials that could go into a supplementary file. Often you want/need references here too. You can use the same reference bib file for this and the main text (as done here) or have separate bib files.
 

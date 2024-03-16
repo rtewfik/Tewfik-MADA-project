@@ -37,9 +37,7 @@ All analyses were conducted using R software (version 4.3.1). Survival analysis 
 
 # Results
 
-## Exploratory/Descriptive analysis
-
-This project included 776,196 males in the U.S. with prostate cancer from the SEER database. Of these, 540,057 (69.6%) were Non-Hispanic White; 526,468 (67.8%) were age 60-79 years at diagnosis; and 629,222 (81.1%) had localized stage of prostate cancer at diagnosis (Table 1).
+This project included 776,196 males in the U.S. with prostate cancer from the SEER database. Of these, 540,057 (69.6%) were Non-Hispanic White; 526,468 (67.8%) were age 60-79 years at diagnosis; 629,222 (81.1%) had localized stage of prostate cancer at diagnosis; 401,176 (51.7%) had at least a college degree; and 490,476 (63.2%) had a family history of cancer (Table 1). The mean survival time for each ethnic group of prostate cancer patients ranged from 64 months ("Other") to 78 months ("White") (Table 1).
 
 ```{r}
 #| label: Table1
@@ -51,38 +49,35 @@ Table1 <- readRDS(here("results/tables/table1.rds"))
 kable(Table1)
 ```
 
-The histogram for survival time in months shows a right-skewed (positively skewed) distribution in which the mean is greater than the median (Figure 1). In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5%. Non-Hispanic Black males had lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2).
 
-Figure 1. Histogram of survival time distribution in months.
+In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5% (Figure 1). Non-Hispanic Black males had statistically significantly lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2). Based on the log-log survival curves and extended Cox models, the proportional hazards assumption holds for all covariates ("Supplementary Material"). 
+
+
+Figure 1. Kaplan-Meier survival curves for males in the U.S. with prostate cancer.
 ```{r}
-include_graphics("../../results/figures/survtime_distribution.png")
+knitr::include_graphics(here("results/figures/survivalcurve_total.png"))
 ```
 
 
 Figure 2. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by race and ethnicity.
 ```{r}
-include_graphics("../../results/figures/survivalcurve.png")
+knitr::include_graphics(here("results/figures/survivalcurve_ethnicity.png"))
 ```
 
 
-## Basic statistical analysis
-
-*To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p\<0.05 means statistical significance" interpretation is not valid.*
-
-fig-result shows a scatterplot figure produced by one of the R scripts.
+After adjustment for age and cancer stage at diagnosis, the rate of all-cause mortality was 1.32 times higher in Non-Hispanic Black males than Non-Hispanic White males (aHR = 1.32; 95% CI = 1.30 – 1.34) (Table 2). Compared to Non-Hispanic White males, the adjusted hazard ratios were less than 1.00 and statistically significant for males who were Non-Hispanic Asian/Pacific Islander, Hispanic, and other race/ethnicity (Table 2). Controlling for the other covariates, males older than 80 years at diagnosis (vs. males 0-49 years) had the highest adjusted hazard ratio for all-cause mortality among all age groups (aHR = 14.38; 95% CI = 13.70 – 15.09), and males with distant stage of prostate cancer (vs. localized stage) had a higher adjusted hazard ratio than males with regional stage (aHR = 7.27; 95% CI = 7.17 – 7.36) (Table 2).
 
 ```{r}
-#| label: fig-result
-#| fig-cap: "Height and weight stratified by gender."
+#| label: Table2
+#| tbl-cap: "Table 2. Adjusted hazard ratios and 95% confidence intervals for time to death (all-cause mortality) among males in the U.S. with prostate cancer (SEER database)."
 #| echo: FALSE
-#knitr::include_graphics(here("results","height-weight-stratified.png"))
+library(here)
+library(knitr)
+Table2 <- readRDS(here("results/tables/full_model_table_hr.rds"))
+kable(Table2)
 ```
 
-## Full analysis
 
-*Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here.*
-
-Example tbl-resulttable2 shows a summary of a linear model fit.
 
 ```{r}
 #| label: tbl-resulttable2

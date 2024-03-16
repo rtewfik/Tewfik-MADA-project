@@ -38,7 +38,7 @@ Load the following R packages before running any code:
 
 * The `results` folder contains code output, including tables (`results/tables` subfolder) and figures (`results/figures` subfolder).
 
-* The `products` folder contains the project manuscript in the `products/manuscript` subfolder.
+* The `products` folder contains the project manuscript and the supplementary material.
 
 
 # Exploratory Analysis
