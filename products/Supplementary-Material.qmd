@@ -1,110 +1,144 @@
 ---
-title: "Supplementary Material"
-
-subtitle: ""
+title: "Suplementary Material"
 author: Ranni Tewfik
 date: "`r Sys.Date()`"
 format:
-  pdf:
+  docx:
     toc: false
     number-sections: true
     highlight-style: github
-bibliography: ../../assets/dataanalysis_template_references.bib
-csl: ../../assets/vancouver.csl
 ---
 
+# Documentation for Supplementary Material
 
-```{r, echo=FALSE, message=FALSE}
-# load a few R packages
-library(here)
-library(knitr)
-```
+The R codes and data files required to reproduce this analysis are available on [GitHub](https://github.com/rtewfik/Tewfik-MADA-project)
+
+* The `data` folder contains the raw data (`data/raw-data` subfolder) and the processed data (`data/processed-data` subfolder).
+
+* The `code` folder contains the R scripts for data processing (`code/processing-code` subfolder) and data analysis (`code/analysis-code` subfolder).
+
+* The `results` folder contains code output, including tables (`results/tables` subfolder) and figures (`results/figures` subfolder).
+
+* The `products` folder contains the project manuscript and the supplementary material.
+
+The scripts in the GitHub repository should be run in the following order:
+
+1. processing-code.qmd
+2. exploratory-analysis.qmd
+3. statistical-analysis.qmd
+
+Load the following R packages before running any code:
+* here
+* dplyr
+* skimr
+* survival
+* survminer
+* ggplot2
+* tidyverse
+* gtsummary
+* knitr
+* car
 
 
-
-The histogram for survival time in months shows a right-skewed (positively skewed) distribution in which the mean is greater than the median (Figure 1). In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5%. Non-Hispanic Black males had lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2).
+# Distribution of Survival Time
 
 Figure 1. Histogram of survival time distribution in months.
 ```{r}
-include_graphics("../../results/figures/survtime_distribution.png")
+library(here)
+library(knitr)
+knitr::include_graphics(here("results/figures/survtime_distribution.png"))
 ```
 
 
+The histogram for survival time in months shows a right-skewed (positively skewed) distribution in which the mean is greater than the median.
 
 
-This shows some materials that could go into a supplementary file. Often you want/need references here too. You can use the same reference bib file for this and the main text (as done here) or have separate bib files.
+# Ethnicity and Survival Time, Stratified by Mortality
 
-For illustrative purposes, I'm doing the supplement as pdf. For this to work, you need a (La)TeX system installed. It's easy. Just follow [these steps](https://quarto.org/docs/output-formats/pdf-basics.html).
-
-Of course you would choose the format based on needs.
-
-I'm also using a different style for the references here. (vancouver vs apa in the main manuscript). Usually one would have the formatting of the references the same in those two documents, but I want to illustrate how easy it is to switch reference formatting styles, you just need to get the right CSL file and specify it in the YAML header. We could also have a seperate reference bibtext (`.bib`) file, but here we are using the same.
-
-# Overview
-
-A quick overview of what readers can find in the supplement.
+Figure 2. Bar Chart of Ethnicity and Survival Time, Stratified by Mortality
+```{r}
+knitr::include_graphics(here("results/figures/ethnicity_survtime_death_barchart.png"))
+```
 
 
-# Code and file information
-
-Explain here what each code/file is and does, and in which order (if any) users need to run thing to reproduce everything.
-Essentially, give a full set of instructions to re-generate everything.
+The bar chart shows that for each ethnicity, the survival time in months was slightly lower among those with all-cause mortality (vs. no death) during the follow-up period of the prostate cancer patients. The difference in survival time is largest among the "Other" group. 
 
 
-{{< pagebreak >}}
+# Mortality and Survival Time, Stratified by Ethnicity
+
+Figure 3. Boxplot of Mortality and Survival Time, Stratified by Ethnicity.
+```{r}
+knitr::include_graphics(here("results/figures/death_survtime_ethnicity_boxplot.png"))
+```
 
 
-# Additional Method Details
-
-Often, the main manuscript only allows for an overview description of the methods. Use the supplement to describe all your methods, models and approaches in a lot of detail. Reference specific parts of your code as needed.
-
-{{< pagebreak >}}
+The boxplot shows that among those with all-cause mortality, the survival time in months is lower across all ethnicities compared to those without all-cause mortality. The survival time is about the same in all ethnicities among those with all-cause mortality, whereas the survival time is noticeable lower among "Other" and higher among "White" among thise without all-cause mortality. 
 
 
-# Additional results
+# Survival Curves
 
-Show additional results here. Those can be some useful exploratory/descriptive figures or tables, or results from additional analyses that didn't make it into the main text.
+Figure 4. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by age group.
+```{r}
+knitr::include_graphics(here("results/figures/survivalcurve_age.png"))
+```
 
 
-## Example additional result
+Figure 5. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by cancer stage.
+```{r}
+knitr::include_graphics(here("results/figures/survivalcurve_stage.png"))
+```
 
 
-@tbl-resulttable1 shows an additional table summarizing a model fit.
+Figure 6. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by education.
+```{r}
+knitr::include_graphics(here("results/figures/survivalcurve_education.png"))
+```
+
+
+Figure 7. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by family history of cancer.
+```{r}
+knitr::include_graphics(here("results/figures/survivalcurve_fhx.png"))
+```
+
+
+The survival curves show that older prostate cancer patients with distant cancer stage had lower survival than their younger counterparts with localized or regional stage. There seemed to be no difference in survival among the different educational attainment groups or family history of cancer groups.
+
+
+# Cox Proportional Hazards Assessment
+
+Figure 8. Log-log survival curve for ethnicity.
+```{r}
+knitr::include_graphics(here("results/figures/loglogcurve_ethnicity.png"))
+```
+
+
+Figure 9. Log-log survival curve for age group.
+```{r}
+knitr::include_graphics(here("results/figures/loglogcurve_age.png"))
+```
+
+
+Figure 10. Log-log survival curve for cancer stage.
+```{r}
+knitr::include_graphics(here("results/figures/loglogcurve_stage.png"))
+```
+
+
+The log-log survival curves are parallel for "ethnicity", "agegroup", and "stage", indicating that the Cox proportional hazards assumption is met for those variables.
+
+
+# Unadjusted Cox Proportional Hazards Model
 
 ```{r}
-#| label: tbl-resulttable1
-#| tbl-cap: "Another fit table."
+#| label: Table1
+#| tbl-cap: "Table 1. Unadjusted hazard ratio and 95% confidence interval for time to death (all-cause mortality) among males in the U.S. with prostate cancer (SEER database)."
 #| echo: FALSE
-resulttable1 = readRDS(here("results","resulttable1.rds"))
-knitr::kable(resulttable1)
+library(here)
+library(knitr)
+Table1 <- readRDS(here("results/tables/simple_model_table_hr.rds"))
+kable(Table1)
 ```
 
 
-
-@fig-result2 shows a scatterplot figure produced by one of the R scripts.
-
-
-```{r}
-#| label: fig-result2
-#| fig-cap: "Height and weight."
-#| echo: FALSE
-knitr::include_graphics(here("results","height_weight.png"))
-```
-
-
-{{< pagebreak >}}
-
-
-# Discussion
-
-Any additional discussion regarding the supplementary material/findings.
-
-These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template. 
-
-{{< pagebreak >}}
-
-
-# References
-
-
+The rate of all-cause mortality was 1.10 times higher in Non-Hispanic Black males than Non-Hispanic White males (HR = 1.10; 95% CI = 1.08 – 1.11). Compared to Non-Hispanic White males, the hazard ratios were less than 1.00 and statistically significant for males who were Non-Hispanic Asian/Pacific Islander, Hispanic, and other race/ethnicity.
 

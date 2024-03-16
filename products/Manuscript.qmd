@@ -78,36 +78,20 @@ kable(Table2)
 ```
 
 
-
-```{r}
-#| label: tbl-resulttable2
-#| tbl-cap: "Linear model fit table."
-#| echo: FALSE
-#resulttable2 = readRDS(here("results","tables-files","resulttable2.rds"))
-#knitr::kable(resulttable2)
-```
-
 {{< pagebreak >}}
 
 # Discussion
 
-## Summary and Interpretation
+The results of this project show that compared to Non-Hispanic White males with prostate cancer, Non-Hispanic Black males had the highest rate of all-cause mortality among all races and ethnicities, controlling for age and cancer stage at diagnosis. This finding is in line with the data provided by the American Cancer Society, which reported that Black men 70-110% higher mortality rate for prostate cancer than White men overall in the U.S. Although the American Cancer Society study had a higher adjusted hazard ratio than our investigation, the conclusion is the same: Black males with prostate cancer have increased risk of all-cause mortality compared to other racial/ethnic groups. Also, older males and males with more extensive stage of prostate cancer had the highest rates of all-cause mortality, supporting the claim from the American Cancer Society that “your age and overall health… and other factors can also affect your outlook [regarding survival rates for prostate cancer].” This project establishes an increasing all-cause mortality hazard by age at diagnosis and by cancer stage at diagnosis. 
 
-*Summarize what you did, what you found and what it means.*
+## Strengths
 
-## Strengths and Limitations
+The strengths of this project are its large sample size, utilizing data from a national registry, as well as its inclusion of all major racial and ethnic groups in the U.S. Based on the result of the investigation, future research should focus on early diagnosis and treatment among Black males with prostate cancer, especially those who are older and with more extensive stage of cancer.
 
-*Discuss what you perceive as strengths and limitations of your analysis.*
+## Limitations
 
-## Conclusions
+One of the limitations of this project is the use of the SEER 18 registry, which only covers about 28% of the U.S. population. The study population may not be a representative sample of the target population, and certain sociodemographic groups may be excluded from the study, resulting in possible external validity problems. Also, the SEER 18 registry only provides data from 2000 to 2018. A longer follow-up time may have resulted in more accurate estimates of hazard ratios. This project examined all-cause mortality as the outcome of interest rather than cause-specific mortality, which provides a smaller sample size (i.e., small changes between comparison groups would not always register as statistically significant) and looks at death specifically caused by prostate cancer instead of death from any cause. This outcome may be more relevant to those with prostate cancer. Another constraint is the limited number of covariates, as few variables of interest were available in the SEER 18 registry. The use of more variables that help explain the association between race/ethnicity and mortality in males with prostate cancer, such as socioeconomic status and comorbidities, may have provided less biased effect sizes.
 
-*What are the main take-home messages?*
-
-*Include citations in your Rmd file using bibtex, the list of references will automatically be placed at the end*
-
-This paper [@leek2015] discusses types of analyses.
-
-These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template.
 
 Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header. Many more style files for almost any journal [are available](https://www.zotero.org/styles). You also specify the location of your bibtex reference file in the YAML. You can call your reference file anything you like, I just used the generic word `references.bib` but giving it a more descriptive name is probably better.
 
