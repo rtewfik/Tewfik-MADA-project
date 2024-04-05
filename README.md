@@ -28,6 +28,9 @@ Load the following R packages before running any code:
 * gtsummary
 * knitr
 * car
+* broom
+* rsample
+* caret
 
 
 # Project Folders
@@ -38,7 +41,7 @@ Load the following R packages before running any code:
 
 * The `results` folder contains code output, including tables (`results/tables` subfolder) and figures (`results/figures` subfolder).
 
-* The `products` folder contains the project manuscript and the supplementary material.
+* The `products` folder contains the project manuscript, the supplementary material, the references BibTeX file, and the APA CSL file.
 
 
 # Exploratory Analysis
@@ -51,4 +54,9 @@ The exploratory analysis script `exploratory-analysis.qmd` in the `code/analysis
 # Statistical Analysis
 
 The statistical analysis script `statistical-analysis.qmd` in the `code/analysis-code` folder is run to load the processed data and do statistical analysis, including assessment of the proportional hazards assumption and fitting Cox proportional-hazards models. The results of the statistical analysis are saved in the `results/tables` and `results/figures` folders.
+
+
+# Manuscript and Supplementary Material
+
+The manuscript script `Manuscript.qmd` in the `products` folder is run to create a Word document of the final manuscript. The supplementary material script `Supplementary-Material.qmd` in the `products` folder is run to create a Word document of the supplementary material.
 

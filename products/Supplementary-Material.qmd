@@ -131,14 +131,44 @@ The log-log survival curves are parallel for "ethnicity", "agegroup", and "stage
 
 ```{r}
 #| label: Table1
-#| tbl-cap: "Table 1. Unadjusted hazard ratio and 95% confidence interval for time to death (all-cause mortality) among males in the U.S. with prostate cancer (SEER database)."
+#| tbl-cap: "Table 1. Unadjusted hazard ratios and 95% confidence intervals for the effect of ethnicity on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database)."
 #| echo: FALSE
 library(here)
 library(knitr)
-Table1 <- readRDS(here("results/tables/simple_model_table_hr.rds"))
+Table1 <- readRDS(here("results/tables/simple_model_ethnicity_table_hr.rds"))
 kable(Table1)
 ```
 
 
 The rate of all-cause mortality was 1.10 times higher in Non-Hispanic Black males than Non-Hispanic White males (HR = 1.10; 95% CI = 1.08 – 1.11). Compared to Non-Hispanic White males, the hazard ratios were less than 1.00 and statistically significant for males who were Non-Hispanic Asian/Pacific Islander, Hispanic, and other race/ethnicity.
+
+
+
+```{r}
+#| label: Table2
+#| tbl-cap: "Table 2. Unadjusted hazard ratios and 95% confidence intervals for the effect of age on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database)."
+#| echo: FALSE
+library(here)
+library(knitr)
+Table2 <- readRDS(here("results/tables/simple_model_agegroup_table_hr.rds"))
+kable(Table2)
+```
+
+
+The rate of all-cause mortality was 16.63 times higher in males age 80+ years than males younger than 50 years (HR = 16.63; 95% CI = 15.86 – 17.45). Compared to males younger than 50 years, the hazard ratios were greater than 1.00 and statistically significant for males 50 years or older.
+
+
+
+```{r}
+#| label: Table3
+#| tbl-cap: "Table 3. Unadjusted hazard ratios and 95% confidence intervals for the effect of cancer stage on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database)."
+#| echo: FALSE
+library(here)
+library(knitr)
+Table3 <- readRDS(here("results/tables/simple_model_stage_table_hr.rds"))
+kable(Table3)
+```
+
+
+The rate of all-cause mortality was 10.06 times higher in males with distant cancer stage than males with localized cancer stage (HR = 10.06; 95% CI = 9.93 - 10.19). Compared to males with localized cancer stage, the rate of all-cause mortality was 0.81 times the corresponding rate in males with regional cancer stage (HR = 0.81; 95% CI = 0.80 - 0.83).
 

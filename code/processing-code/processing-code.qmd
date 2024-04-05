@@ -8,10 +8,12 @@ output: html_document
 
 # Processing Script
 
+
 This processing script loads the raw data, processes and cleans it, and saves it as an Rds file in the processed-data folder.
 
 
 # Load and Check Raw Data
+
 
 ```{r}
 # Load required packages
@@ -32,6 +34,7 @@ The raw dataset has 1,048,575 observations and 7 variables: "race", "age", "stag
 
 
 # Explore Raw Data
+
 
 ```{r}
 # Attach raw data
@@ -77,6 +80,7 @@ For the "survival_months" variable, the mean is 88.46 months, the minimum is 0 m
 
 
 # Clean Raw Data
+
 
 ```{r}
 # Create a new dataset from the raw data that does not include observations with missing data for "survival_months"; includes only "Localized", "Regional", and "Distant" categories for "stage"; and creates a new "death" variable from "vital_status" in which "death" = 1 if "vital_status" = "Dead" and "death" = 0 if "vital_status" = "Alive"
@@ -124,6 +128,7 @@ After processing the raw dataset to remove missing observations for "survival_mo
 
 
 # Save Processed Data
+
 
 ```{r}
 saveRDS(seer, file = here("data/processed-data/processeddata.rds"))

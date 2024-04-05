@@ -8,10 +8,12 @@ output: html_document
   
 # Exploratory Analysis
 
+
 This exploratory analysis script loads the processed data and explores the 7 variables in the dataset.
 
 
 # Load and Check Processed Data
+
 
 ```{r}
 # Load required packages
@@ -39,6 +41,7 @@ head(seer)
 
 
 # Data Exploration - Tables
+
 
 ```{r}
 # Frequency and proportion tables of "ethnicity" variable
@@ -82,6 +85,7 @@ A summary table of the data ("summarytable.rds") can be found in the "tables" fo
 
 # Table 1 - Study sample characteristics
 
+
 ```{r}
 # Create Table 1 (study sample characteristics) from the data
 table1 <- seer %>% tbl_summary(by = ethnicity, 
@@ -101,9 +105,11 @@ saveRDS(table1, file = here("results/tables/table1.rds"))
 Table 1 of the study sample characteristics ("table1.rds") can be found in the "tables" folder.
 
 
-# Table 2 - Kaplan-Meier survival
+Kaplan-Meier Survival Tables
+
+
 ```{r}
-# Create Table 2 (Kaplan-Meier 1-year, 5-year, and 10-year survival from the data)
+# Look at Kaplan-Meier 1-year, 5-year, and 10-year survival from the data
 ## Overall survival
 summary(survfit(Surv(survival_time, death) ~ 1), times <- c(12, 60, 120))
 
@@ -115,16 +121,11 @@ summary(survfit(Surv(survival_time, death) ~ agegroup), times <- c(12, 60, 120))
 
 ## Survival by "stage"
 summary(survfit(Surv(survival_time, death) ~ stage), times <- c(12, 60, 120))
-
-## Survival by "education"
-summary(survfit(Surv(survival_time, death) ~ education), times <- c(12, 60, 120))
-
-## Survival by "family_history"
-summary(survfit(Surv(survival_time, death) ~ family_history), times <- c(12, 60, 120))
 ```
 
 
 # Data Exploration - Figures
+
 
 ```{r}
 # Create a histogram of "survival_time"

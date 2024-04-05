@@ -7,11 +7,17 @@ format:
     toc: false
     number-sections: true
     highlight-style: github
+bibliography: references.bib
+csl: apa.csl
 ---
 
 # Introduction
 
-Because of the discrepancies in the literature regarding the relationship between race/ethnicity and mortality among patients with prostate cancer, one of the motivations for this project is to better understand that relationship using a large national registry of prostate cancer patients. This project is different from what has already been done because other studies have used smaller sample sizes or have not included several racial and ethnic groups in the study population. Therefore, the research question for this project is: Among males diagnosed with prostate cancer, are race and ethnicity associated with time to all-cause mortality?
+Prostate cancer is the second-most common cancer among men in the U.S. and has accounted for more than 34,000 deaths in 2023 from 288,000 new cases.[@noauthor_prostate_nodate] Other than lung cancer, prostate cancer is the leading cause of cancer death in men – nearly 1 man in 40 will die of prostate cancer.[@noauthor_prostate_nodate] As prostate cancer is rare in younger men and the risk of prostate cancer increases drastically as men get older (about 60% of cases are in males older than 65 years), age is an apparent risk factor for prostate cancer.[@noauthor_prostate_nodate] However, the impact of race and ethnicity as a risk factor for death among prostate cancer patients is not completely clear.[@noauthor_prostate_nodate] According to the American Cancer Society, there is some evidence that African American males have a higher risk than males of other races, but cancer often develops earlier in life in this demographic group.1 Fewer studies have focused on other races and ethnicities, and the reasons for racial and ethnic differences are not well understood.[@noauthor_prostate_nodate]
+
+A cohort study by Stern et. al [@stern_association_2021] investigated the association of race and ethnicity with mortality among 51,000 White, Black, and Asian men in Canada with a prostate cancer diagnosis between 1992 and 2010; the study reported that Black men did not have an increased rate of prostate cancer-specific mortality.[@stern_association_2021] Another cohort study by Rasmussen et al. [@rasmussen_survival_2023] followed 13,000 male veterans with prostate cancer in the U.S. between 2006 and 2021; the study concluded that Hispanic and Non-Hispanic Black males with prostate cancer had lower rates of mortality than their Non-Hispanic White counterparts, and other races with prostate cancer had a higher rate of mortality.[@rasmussen_survival_2023]  
+
+Because of the discrepancies in the literature regarding the relationship between race/ethnicity and mortality among patients with prostate cancer, one of the motivations for this project is to better understand that relationship using a large national registry of prostate cancer patients. This project is different from what has already been done because other investigations have used smaller sample sizes or have not included several racial and ethnic groups in the study population. Therefore, the research question for this project is: Among males diagnosed with prostate cancer, are race and ethnicity associated with time to all-cause mortality?
 
 {{< pagebreak >}}
 
@@ -19,7 +25,7 @@ Because of the discrepancies in the literature regarding the relationship betwee
 
 ## Data Source
 
-The Surveillance, Epidemiology, and End Results (SEER) Program of the National Cancer Institute (NCI) provides information on cancer incidence and survival in the United States. SEER uses population-based cancer registries that cover about half of the national population. The SEER registries collect data on tumor site and morphology, stage at diagnosis, treatment, vital status, and patient demographics, including race and ethnicity. This project used the SEER\*Stat software (version 8.4.2) to access the SEER 18 (2000-2018) Registry for data on 1,048,575 prostate cancer patients.
+The Surveillance, Epidemiology, and End Results (SEER) Program of the National Cancer Institute (NCI) provides information on cancer incidence and survival in the United States.[@noauthor_about_nodate] SEER uses population-based cancer registries that cover about half of the national population.[@noauthor_about_nodate] The SEER registries collect data on tumor site and morphology, stage at diagnosis, treatment, vital status, and patient demographics, including race and ethnicity.[@noauthor_about_nodate] This project used the SEER\*Stat software (version 8.4.2) to access the SEER 18 (2000-2018) Registry for data on 1,048,575 prostate cancer patients.
 
 ## Project Design
 
@@ -82,7 +88,7 @@ kable(Table2)
 
 # Discussion
 
-The results of this project show that compared to Non-Hispanic White males with prostate cancer, Non-Hispanic Black males had the highest rate of all-cause mortality among all races and ethnicities, controlling for age and cancer stage at diagnosis. This finding is in line with the data provided by the American Cancer Society, which reported that Black men 70-110% higher mortality rate for prostate cancer than White men overall in the U.S. Although the American Cancer Society study had a higher adjusted hazard ratio than our investigation, the conclusion is the same: Black males with prostate cancer have increased risk of all-cause mortality compared to other racial/ethnic groups. Also, older males and males with more extensive stage of prostate cancer had the highest rates of all-cause mortality, supporting the claim from the American Cancer Society that “your age and overall health… and other factors can also affect your outlook [regarding survival rates for prostate cancer].” This project establishes an increasing all-cause mortality hazard by age at diagnosis and by cancer stage at diagnosis. 
+The results of this project show that compared to Non-Hispanic White males with prostate cancer, Non-Hispanic Black males had the highest rate of all-cause mortality among all races and ethnicities, controlling for age and cancer stage at diagnosis. This finding is in line with the data provided by the American Cancer Society, which reported that Black men 70-110% higher mortality rate for prostate cancer than White men overall in the U.S.[@noauthor_new_nodate] Although the American Cancer Society study [@noauthor_new_nodate] had a higher adjusted hazard ratio than our investigation, the conclusion is the same: Black males with prostate cancer have increased risk of all-cause mortality compared to other racial/ethnic groups. Also, older males and males with more extensive stage of prostate cancer had the highest rates of all-cause mortality, supporting the claim from the American Cancer Society that “your age and overall health… and other factors can also affect your outlook [regarding survival rates for prostate cancer].”[@noauthor_prostate_nodate] This project establishes an increasing all-cause mortality hazard by age at diagnosis and by cancer stage at diagnosis. 
 
 ## Strengths
 
@@ -90,11 +96,10 @@ The strengths of this project are its large sample size, utilizing data from a n
 
 ## Limitations
 
-One of the limitations of this project is the use of the SEER 18 registry, which only covers about 28% of the U.S. population. The study population may not be a representative sample of the target population, and certain sociodemographic groups may be excluded from the study, resulting in possible external validity problems. Also, the SEER 18 registry only provides data from 2000 to 2018. A longer follow-up time may have resulted in more accurate estimates of hazard ratios. This project examined all-cause mortality as the outcome of interest rather than cause-specific mortality, which provides a smaller sample size (i.e., small changes between comparison groups would not always register as statistically significant) and looks at death specifically caused by prostate cancer instead of death from any cause. This outcome may be more relevant to those with prostate cancer. Another constraint is the limited number of covariates, as few variables of interest were available in the SEER 18 registry. The use of more variables that help explain the association between race/ethnicity and mortality in males with prostate cancer, such as socioeconomic status and comorbidities, may have provided less biased effect sizes.
-
-
-Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header. Many more style files for almost any journal [are available](https://www.zotero.org/styles). You also specify the location of your bibtex reference file in the YAML. You can call your reference file anything you like, I just used the generic word `references.bib` but giving it a more descriptive name is probably better.
+One of the limitations of this project is the use of the SEER 18 registry, which only covers about 28% of the U.S. population.[@noauthor_seerstat_nodate] The study population may not be a representative sample of the target population, and certain sociodemographic groups may be excluded from the study, resulting in possible external validity problems. Also, the SEER 18 registry only provides data from 2000 to 2018. A longer follow-up time may have resulted in more accurate estimates of hazard ratios. This project examined all-cause mortality as the outcome of interest rather than cause-specific mortality, which provides a smaller sample size (i.e., small changes between comparison groups would not always register as statistically significant) and looks at death specifically caused by prostate cancer instead of death from any cause. This outcome may be more relevant to those with prostate cancer. Another constraint is the limited number of covariates, as few variables of interest were available in the SEER 18 registry. The use of more variables that help explain the association between race/ethnicity and mortality in males with prostate cancer, such as socioeconomic status and comorbidities, may have provided less biased effect sizes.
 
 {{< pagebreak >}}
 
 # References
+
+
