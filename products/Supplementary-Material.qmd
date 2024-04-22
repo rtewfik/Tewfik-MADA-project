@@ -39,6 +39,7 @@ Load the following R packages before running any code:
 * knitr
 * car
 
+{{< pagebreak >}}
 
 # Distribution of Survival Time
 
@@ -52,6 +53,7 @@ knitr::include_graphics(here("results/figures/survtime_distribution.png"))
 
 The histogram for survival time in months shows a right-skewed (positively skewed) distribution in which the mean is greater than the median.
 
+{{< pagebreak >}}
 
 # Ethnicity and Survival Time, Stratified by Mortality
 
@@ -61,8 +63,9 @@ knitr::include_graphics(here("results/figures/ethnicity_survtime_death_barchart.
 ```
 
 
-The bar chart shows that for each ethnicity, the survival time in months was slightly lower among those with all-cause mortality (vs. no death) during the follow-up period of the prostate cancer patients. The difference in survival time is largest among the "Other" group. 
+The bar chart shows that for each ethnicity, the survival time in months was slightly lower among those with all-cause mortality (vs. no death) during the follow-up period of the prostate cancer patients. The difference in survival time is largest among the "Other" group.
 
+{{< pagebreak >}}
 
 # Mortality and Survival Time, Stratified by Ethnicity
 
@@ -74,6 +77,7 @@ knitr::include_graphics(here("results/figures/death_survtime_ethnicity_boxplot.p
 
 The boxplot shows that among those with all-cause mortality, the survival time in months is lower across all ethnicities compared to those without all-cause mortality. The survival time is about the same in all ethnicities among those with all-cause mortality, whereas the survival time is noticeable lower among "Other" and higher among "White" among thise without all-cause mortality. 
 
+{{< pagebreak >}}
 
 # Survival Curves
 
@@ -103,6 +107,7 @@ knitr::include_graphics(here("results/figures/survivalcurve_fhx.png"))
 
 The survival curves show that older prostate cancer patients with distant cancer stage had lower survival than their younger counterparts with localized or regional stage. There seemed to be no difference in survival among the different educational attainment groups or family history of cancer groups.
 
+{{< pagebreak >}}
 
 # Cox Proportional Hazards Assessment
 
@@ -126,47 +131,33 @@ knitr::include_graphics(here("results/figures/loglogcurve_stage.png"))
 
 The log-log survival curves are parallel for "ethnicity", "agegroup", and "stage", indicating that the Cox proportional hazards assumption is met for those variables.
 
+{{< pagebreak >}}
 
 # Unadjusted Cox Proportional Hazards Model
 
+*Table 1. Unadjusted hazard ratios and 95% confidence intervals for the effect of ethnicity on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).*
 ```{r}
-#| label: Table1
-#| tbl-cap: "Table 1. Unadjusted hazard ratios and 95% confidence intervals for the effect of ethnicity on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database)."
-#| echo: FALSE
-library(here)
-library(knitr)
-Table1 <- readRDS(here("results/tables/simple_model_ethnicity_table_hr.rds"))
-kable(Table1)
+knitr::include_graphics(here("results/tables/simple_model_ethnicity_table_hr.png"))
 ```
 
 
 The rate of all-cause mortality was 1.10 times higher in Non-Hispanic Black males than Non-Hispanic White males (HR = 1.10; 95% CI = 1.08 – 1.11). Compared to Non-Hispanic White males, the hazard ratios were less than 1.00 and statistically significant for males who were Non-Hispanic Asian/Pacific Islander, Hispanic, and other race/ethnicity.
 
+{{< pagebreak >}}
 
-
+*Table 2. Unadjusted hazard ratios and 95% confidence intervals for the effect of age on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).*
 ```{r}
-#| label: Table2
-#| tbl-cap: "Table 2. Unadjusted hazard ratios and 95% confidence intervals for the effect of age on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database)."
-#| echo: FALSE
-library(here)
-library(knitr)
-Table2 <- readRDS(here("results/tables/simple_model_agegroup_table_hr.rds"))
-kable(Table2)
+knitr::include_graphics(here("results/tables/simple_model_agegroup_table_hr.png"))
 ```
 
 
 The rate of all-cause mortality was 16.63 times higher in males age 80+ years than males younger than 50 years (HR = 16.63; 95% CI = 15.86 – 17.45). Compared to males younger than 50 years, the hazard ratios were greater than 1.00 and statistically significant for males 50 years or older.
 
+{{< pagebreak >}}
 
-
+*Table 3. Unadjusted hazard ratios and 95% confidence intervals for the effect of cancer stage on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).*
 ```{r}
-#| label: Table3
-#| tbl-cap: "Table 3. Unadjusted hazard ratios and 95% confidence intervals for the effect of cancer stage on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database)."
-#| echo: FALSE
-library(here)
-library(knitr)
-Table3 <- readRDS(here("results/tables/simple_model_stage_table_hr.rds"))
-kable(Table3)
+knitr::include_graphics(here("results/tables/simple_model_stage_table_hr.png"))
 ```
 
 

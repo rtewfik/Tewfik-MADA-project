@@ -27,7 +27,6 @@ library(tidyverse)
 library(gtsummary)
 library(car)
 library(gt)
-library(webshot2)
 
 # Load processed data
 seer <- readRDS(here("data/processed-data/processeddata.rds"))
@@ -109,7 +108,7 @@ gtsave(table1, file = here("results/tables/table1.png"))
 ```
 
 
-Table 1 of the study sample characteristics ("table1.rds") can be found in the "tables" folder.
+Table 1 of the study sample characteristics ("table1.png") can be found in the "tables" folder.
 
 
 Kaplan-Meier Survival Tables

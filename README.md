@@ -15,6 +15,37 @@ All required files can be found within this GitHub repository. The scripts shoul
 3. statistical-analysis.qmd
 
 
+# Data Dictionary for Variables in Original Dataset
+
+1. race
+  + class: character
+  + description: race/ethnicity
+  
+2. age
+  + class: character
+  + description: age group in years
+  
+3. stage
+  + class: character
+  + description: cancer stage
+  
+4. survival_months
+  + class: character
+  + description: time to all-cause mortality or end of follow-up in months
+  
+5. vital_status
+  + class: character
+  + description: vital status (alive or dead)
+  
+6. education
+  + class: character
+  + description: level of educational attainment
+  
+7. family_history
+  + class: character
+  + description: family history of cancer (yes or no)
+
+
 # Required Packages
 
 Load the following R packages before running any code:

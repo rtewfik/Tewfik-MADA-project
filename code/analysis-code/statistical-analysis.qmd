@@ -56,7 +56,7 @@ seer$death <- as.numeric(seer$death)
 full_model <- coxph(Surv(survival_time, death) ~ ., data = seer, method = "breslow")
 
 # Perform backward elimination to choose the best variables
-final_model <- step(full_model, direction = "backward")
+final_model <- stats::step(full_model, direction = "backward")
 summary(final_model)
 ```
 
@@ -131,15 +131,35 @@ simple_model_ethnicity_table_hr <- data.frame(
   "95% CI (upper)" = hr[, 4]
   )
 
+# Format numerical values to two decimal places
+numeric_cols <- sapply(simple_model_ethnicity_table_hr, is.numeric)
+
+simple_model_ethnicity_table_hr[, numeric_cols] <- round(simple_model_ethnicity_table_hr[, numeric_cols], digits = 2)
+
+# Set flextable background to white
+set_flextable_defaults(background.color = "white")
+
+# Create a flextable object
+simple_model_ethnicity_table_hr <- flextable(simple_model_ethnicity_table_hr)
+
+# Set column headers
+simple_model_ethnicity_table_hr <- set_header_labels(x = simple_model_ethnicity_table_hr, values = c("Characteristic", "Hazard Ratio", "Lower 95% CI", "Upper 95% CI"))
+
+# Add a title
+simple_model_ethnicity_table_hr <- set_caption(simple_model_ethnicity_table_hr, "Table 1. Unadjusted hazard ratios and 95% confidence intervals for the effect of ethnicity on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).")
+
+# Autofit the table
+simple_model_ethnicity_table_hr <- autofit(simple_model_ethnicity_table_hr)
+
 # Look at the table with hazard ratios and confidence intervals
 print(simple_model_ethnicity_table_hr)
 
 # Save the table with hazard ratios and confidence intervals
-saveRDS(simple_model_ethnicity_table_hr, file = here("results/tables/simple_model_ethnicity_table_hr.rds"))
+save_as_image(simple_model_ethnicity_table_hr, here("results/tables/simple_model_ethnicity_table_hr.png"), expand = 10)
 ```
 
 
-The results from the model fitting using only "ethnicity" as the predictor ("simple_model_ethnicity_table.rds" and "simple_model_ethnicity_table_hr.rds") can be found in the "tables" folder.
+The results from the model fitting using only "ethnicity" as the predictor ("simple_model_ethnicity_table.rds" and "simple_model_ethnicity_table_hr.png") can be found in the "tables" folder.
 
 
 ```{r}
@@ -173,15 +193,35 @@ simple_model_agegroup_table_hr <- data.frame(
   "95% CI (upper)" = hr[, 4]
   )
 
+# Format numerical values to two decimal places
+numeric_cols <- sapply(simple_model_agegroup_table_hr, is.numeric)
+
+simple_model_agegroup_table_hr[, numeric_cols] <- round(simple_model_agegroup_table_hr[, numeric_cols], digits = 2)
+
+# Set flextable background to white
+set_flextable_defaults(background.color = "white")
+
+# Create a flextable object
+simple_model_agegroup_table_hr <- flextable(simple_model_agegroup_table_hr)
+
+# Set column headers
+simple_model_agegroup_table_hr <- set_header_labels(x = simple_model_agegroup_table_hr, values = c("Characteristic", "Hazard Ratio", "Lower 95% CI", "Upper 95% CI"))
+
+# Add a title
+simple_model_agegroup_table_hr <- set_caption(simple_model_agegroup_table_hr, "Table 2. Unadjusted hazard ratios and 95% confidence intervals for the effect of age on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).")
+
+# Autofit the table
+simple_model_agegroup_table_hr <- autofit(simple_model_agegroup_table_hr)
+
 # Look at the table with hazard ratios and confidence intervals
 print(simple_model_agegroup_table_hr)
 
 # Save the table with hazard ratios and confidence intervals
-saveRDS(simple_model_agegroup_table_hr, file = here("results/tables/simple_model_agegroup_table_hr.rds"))
+save_as_image(simple_model_agegroup_table_hr, here("results/tables/simple_model_agegroup_table_hr.png"), expand = 10)
 ```
 
 
-The results from the model fitting using only "agegroup" as the predictor ("simple_model_agegroup_table.rds" and "simple_model_agegroup_table_hr.rds") can be found in the "tables" folder.
+The results from the model fitting using only "agegroup" as the predictor ("simple_model_agegroup_table.rds" and "simple_model_agegroup_table_hr.png") can be found in the "tables" folder.
 
 
 ```{r}
@@ -215,15 +255,35 @@ simple_model_stage_table_hr <- data.frame(
   "95% CI (upper)" = hr[, 4]
   )
 
+# Format numerical values to two decimal places
+numeric_cols <- sapply(simple_model_stage_table_hr, is.numeric)
+
+simple_model_stage_table_hr[, numeric_cols] <- round(simple_model_stage_table_hr[, numeric_cols], digits = 2)
+
+# Set flextable background to white
+set_flextable_defaults(background.color = "white")
+
+# Create a flextable object
+simple_model_stage_table_hr <- flextable(simple_model_stage_table_hr)
+
+# Set column headers
+simple_model_stage_table_hr <- set_header_labels(x = simple_model_stage_table_hr, values = c("Characteristic", "Hazard Ratio", "Lower 95% CI", "Upper 95% CI"))
+
+# Add a title
+simple_model_stage_table_hr <- set_caption(simple_model_stage_table_hr, "Table 3. Unadjusted hazard ratios and 95% confidence intervals for the effect of cancer stage on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).")
+
+# Autofit the table
+simple_model_stage_table_hr <- autofit(simple_model_stage_table_hr)
+
 # Look at the table with hazard ratios and confidence intervals
 print(simple_model_stage_table_hr)
 
 # Save the table with hazard ratios and confidence intervals
-saveRDS(simple_model_stage_table_hr, file = here("results/tables/simple_model_stage_table_hr.rds"))
+save_as_image(simple_model_stage_table_hr, here("results/tables/simple_model_stage_table_hr.png"), expand = 10)
 ```
 
 
-The results from the model fitting using only "stage" as the predictor ("simple_model_stage_table.rds" and "simple_model_stage_table_hr.rds") can be found in the "tables" folder.
+The results from the model fitting using only "stage" as the predictor ("simple_model_stage_table.rds" and "simple_model_stage_table_hr.png") can be found in the "tables" folder.
 
 
 # Adjusted Analysis
