@@ -31,6 +31,12 @@ Load the following R packages before running any code:
 * broom
 * rsample
 * caret
+* tidymodels
+* glmnet
+* MASS
+* discrim
+* flextable
+* gt
 
 
 # Project Folders

@@ -15,11 +15,9 @@ csl: apa.csl
 
 Prostate cancer is the second-most common cancer among men in the U.S. and has accounted for more than 34,000 deaths in 2023 from 288,000 new cases.[@noauthor_prostate_nodate] Other than lung cancer, prostate cancer is the leading cause of cancer death in men – nearly 1 man in 40 will die of prostate cancer.[@noauthor_prostate_nodate] As prostate cancer is rare in younger men and the risk of prostate cancer increases drastically as men get older (about 60% of cases are in males older than 65 years), age is an apparent risk factor for prostate cancer.[@noauthor_prostate_nodate] However, the impact of race and ethnicity as a risk factor for death among prostate cancer patients is not completely clear.[@noauthor_prostate_nodate] According to the American Cancer Society, there is some evidence that African American males have a higher risk than males of other races, but cancer often develops earlier in life in this demographic group.1 Fewer studies have focused on other races and ethnicities, and the reasons for racial and ethnic differences are not well understood.[@noauthor_prostate_nodate]
 
-A cohort study by Stern et. al [@stern_association_2021] investigated the association of race and ethnicity with mortality among 51,000 White, Black, and Asian men in Canada with a prostate cancer diagnosis between 1992 and 2010; the study reported that Black men did not have an increased rate of prostate cancer-specific mortality.[@stern_association_2021] Another cohort study by Rasmussen et al. [@rasmussen_survival_2023] followed 13,000 male veterans with prostate cancer in the U.S. between 2006 and 2021; the study concluded that Hispanic and Non-Hispanic Black males with prostate cancer had lower rates of mortality than their Non-Hispanic White counterparts, and other races with prostate cancer had a higher rate of mortality.[@rasmussen_survival_2023]  
+A cohort study by Stern et. al [@stern_association_2021] investigated the association of race and ethnicity with mortality among 51,000 White, Black, and Asian men in Canada with a prostate cancer diagnosis between 1992 and 2010; the study reported that Black men did not have an increased rate of prostate cancer-specific mortality.[@stern_association_2021] Another cohort study by Rasmussen et al. [@rasmussen_survival_2023] followed 13,000 male veterans with prostate cancer in the U.S. between 2006 and 2021; the study concluded that Hispanic and Non-Hispanic Black males with prostate cancer had lower rates of mortality than their Non-Hispanic White counterparts, and other races with prostate cancer had a higher rate of mortality.[@rasmussen_survival_2023]
 
 Because of the discrepancies in the literature regarding the relationship between race/ethnicity and mortality among patients with prostate cancer, one of the motivations for this project is to better understand that relationship using a large national registry of prostate cancer patients. This project is different from what has already been done because other investigations have used smaller sample sizes or have not included several racial and ethnic groups in the study population. Therefore, the research question for this project is: Among males diagnosed with prostate cancer, are race and ethnicity associated with time to all-cause mortality?
-
-{{< pagebreak >}}
 
 # Methods
 
@@ -46,49 +44,41 @@ All analyses were conducted using R software (version 4.3.1). Survival analysis 
 This project included 776,196 males in the U.S. with prostate cancer from the SEER database. Of these, 540,057 (69.6%) were Non-Hispanic White; 526,468 (67.8%) were age 60-79 years at diagnosis; 629,222 (81.1%) had localized stage of prostate cancer at diagnosis; 401,176 (51.7%) had at least a college degree; and 490,476 (63.2%) had a family history of cancer (Table 1). The mean survival time for each ethnic group of prostate cancer patients ranged from 64 months ("Other") to 78 months ("White") (Table 1).
 
 ```{r}
-#| label: Table1
-#| tbl-cap: "Table 1. Study sample characteristics of males in the U.S. with prostate cancer by race and ethnicity."
-#| echo: FALSE
 library(here)
 library(knitr)
-Table1 <- readRDS(here("results/tables/table1.rds"))
-kable(Table1)
+knitr::include_graphics(here("results/tables/table1.png"))
 ```
 
+{{< pagebreak >}}
 
-In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5% (Figure 1). Non-Hispanic Black males had statistically significantly lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2). Based on the log-log survival curves and extended Cox models, the proportional hazards assumption holds for all covariates ("Supplementary Material"). 
-
+In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5% (Figure 1). Non-Hispanic Black males had statistically significantly lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2). Based on the log-log survival curves and extended Cox models, the proportional hazards assumption holds for all covariates ("Supplementary Material").
 
 Figure 1. Kaplan-Meier survival curves for males in the U.S. with prostate cancer.
+
 ```{r}
 knitr::include_graphics(here("results/figures/survivalcurve_total.png"))
 ```
 
-
 Figure 2. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by race and ethnicity.
+
 ```{r}
 knitr::include_graphics(here("results/figures/survivalcurve_ethnicity.png"))
 ```
 
-
 After adjustment for age and cancer stage at diagnosis, the rate of all-cause mortality was 1.32 times higher in Non-Hispanic Black males than Non-Hispanic White males (aHR = 1.32; 95% CI = 1.30 – 1.34) (Table 2). Compared to Non-Hispanic White males, the adjusted hazard ratios were less than 1.00 and statistically significant for males who were Non-Hispanic Asian/Pacific Islander, Hispanic, and other race/ethnicity (Table 2). Controlling for the other covariates, males older than 80 years at diagnosis (vs. males 0-49 years) had the highest adjusted hazard ratio for all-cause mortality among all age groups (aHR = 14.38; 95% CI = 13.70 – 15.09), and males with distant stage of prostate cancer (vs. localized stage) had a higher adjusted hazard ratio than males with regional stage (aHR = 7.27; 95% CI = 7.17 – 7.36) (Table 2).
 
-```{r}
-#| label: Table2
-#| tbl-cap: "Table 2. Adjusted hazard ratios and 95% confidence intervals for time to death (all-cause mortality) among males in the U.S. with prostate cancer (SEER database)."
-#| echo: FALSE
-library(here)
-library(knitr)
-Table2 <- readRDS(here("results/tables/full_model_table_hr.rds"))
-kable(Table2)
-```
+{{< pagebreak >}}
 
+*Table 2. Adjusted hazard ratios and 95% confidence intervals for time to all-cause mortality among males with prostate cancer.*
+```{r}
+knitr::include_graphics(here("results/tables/full_model_table_hr.png"))
+```
 
 {{< pagebreak >}}
 
 # Discussion
 
-The results of this project show that compared to Non-Hispanic White males with prostate cancer, Non-Hispanic Black males had the highest rate of all-cause mortality among all races and ethnicities, controlling for age and cancer stage at diagnosis. This finding is in line with the data provided by the American Cancer Society, which reported that Black men 70-110% higher mortality rate for prostate cancer than White men overall in the U.S.[@noauthor_new_nodate] Although the American Cancer Society study [@noauthor_new_nodate] had a higher adjusted hazard ratio than our investigation, the conclusion is the same: Black males with prostate cancer have increased risk of all-cause mortality compared to other racial/ethnic groups. Also, older males and males with more extensive stage of prostate cancer had the highest rates of all-cause mortality, supporting the claim from the American Cancer Society that “your age and overall health… and other factors can also affect your outlook [regarding survival rates for prostate cancer].”[@noauthor_prostate_nodate] This project establishes an increasing all-cause mortality hazard by age at diagnosis and by cancer stage at diagnosis. 
+The results of this project show that compared to Non-Hispanic White males with prostate cancer, Non-Hispanic Black males had the highest rate of all-cause mortality among all races and ethnicities, controlling for age and cancer stage at diagnosis. This finding is in line with the data provided by the American Cancer Society, which reported that Black men 70-110% higher mortality rate for prostate cancer than White men overall in the U.S.[@noauthor_new_nodate] Although the American Cancer Society study [@noauthor_new_nodate] had a higher adjusted hazard ratio than our investigation, the conclusion is the same: Black males with prostate cancer have increased risk of all-cause mortality compared to other racial/ethnic groups. Also, older males and males with more extensive stage of prostate cancer had the highest rates of all-cause mortality, supporting the claim from the American Cancer Society that “your age and overall health… and other factors can also affect your outlook \[regarding survival rates for prostate cancer\].”[@noauthor_prostate_nodate] This project establishes an increasing all-cause mortality hazard by age at diagnosis and by cancer stage at diagnosis.
 
 ## Strengths
 
@@ -101,5 +91,3 @@ One of the limitations of this project is the use of the SEER 18 registry, which
 {{< pagebreak >}}
 
 # References
-
-

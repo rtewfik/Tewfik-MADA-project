@@ -26,6 +26,8 @@ library(ggplot2)
 library(tidyverse)
 library(gtsummary)
 library(car)
+library(gt)
+library(webshot2)
 
 # Load processed data
 seer <- readRDS(here("data/processed-data/processeddata.rds"))
@@ -88,17 +90,22 @@ A summary table of the data ("summarytable.rds") can be found in the "tables" fo
 
 ```{r}
 # Create Table 1 (study sample characteristics) from the data
-table1 <- seer %>% tbl_summary(by = ethnicity, 
-                               statistic = list(all_continuous() ~ "{mean} ({sd})"),
-                               label = c(agegroup ~ "Age at diagnosis (years)", stage ~ "Cancer stage at diagnosis",   
-                               education ~ "Educational attainment", family_history ~ "Family history of cancer",      
-                               survival_time ~ "Survival time (months)", death ~ "Vital status")) %>%
-                   modify_caption("Table 1. Study sample characteristics of males in the U.S. with prostate cancer by race                                   and ethnicity.")
+table <- seer %>% 
+  mutate(death = case_when(death == "1" ~ "alive",
+                           death == "2" ~ "dead")) %>%
+  tbl_summary(by = ethnicity, 
+              statistic = list(all_continuous() ~ "{mean} ({sd})"),
+              label = c(agegroup ~ "Age at diagnosis (years)", stage ~ "Cancer stage at diagnosis",   
+                        education ~ "Educational attainment", family_history ~ "Family history of cancer",
+                        survival_time ~ "Survival time (months)", death ~ "Vital status")) %>%
+  modify_caption("Table 1. Study sample characteristics of males in the U.S. with prostate cancer by race and ethnicity.")
+
+table1 <- as_gt(table)
 
 table1
 
 # Save the summary table
-saveRDS(table1, file = here("results/tables/table1.rds"))
+gtsave(table1, file = here("results/tables/table1.png"))
 ```
 
 

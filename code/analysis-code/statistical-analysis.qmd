@@ -29,6 +29,11 @@ library(car)
 library(broom)
 library(rsample)
 library(caret)
+library(tidymodels)
+library(glmnet)
+library(MASS)
+library(discrim)
+library(flextable)
 
 # Load processed data
 seer <- readRDS(here("data/processed-data/processeddata.rds"))
@@ -247,22 +252,42 @@ saveRDS(full_model_table, file = here("results/tables/full_model_table.rds"))
 coxsummary <- summary(full_model)
 hr <- coxsummary$conf.int
 
-full_model_table_hr <- data.frame(
+full_model_hr <- data.frame(
   "Characteristic" = c("Asian", "Black", "Hispanic", "Other", "50-59 years", "60-69 years", "70-79 year", "80+ years", "Distant", "Regional"),
   "Adjusted hazard ratio" = hr[, 1],
   "95% CI (lower)" = hr[, 3],
   "95% CI (upper)" = hr[, 4]
   )
 
+# Format numerical values to two decimal places
+numeric_cols <- sapply(full_model_hr, is.numeric)
+
+full_model_hr[, numeric_cols] <- round(full_model_hr[, numeric_cols], digits = 2)
+
+# Set flextable background to white
+set_flextable_defaults(background.color = "white")
+
+# Create a flextable object
+full_model_table_hr <- flextable(full_model_hr)
+
+# Set column headers
+full_model_table_hr <- set_header_labels(x = full_model_table_hr, values = c("Characteristic", "Adjusted Hazard Ratio", "Lower 95% CI", "Upper 95% CI"))
+
+# Add a title
+full_model_table_hr <- set_caption(full_model_table_hr, "Table 2. Adjusted hazard ratios and 95% confidence intervals for time to all-cause mortality among males with prostate cancer.")
+
+# Autofit the table
+full_model_table_hr <- autofit(full_model_table_hr)
+
 # Look at the table with hazard ratios and confidence intervals
-print (full_model_table_hr)
+print(full_model_table_hr)
 
 # Save the table with hazard ratios and confidence intervals
-saveRDS(full_model_table_hr, file = here("results/tables/full_model_table_hr.rds"))
+save_as_image(full_model_table_hr, here("results/tables/full_model_table_hr.png"), expand = 10)
 ```
 
 
-The results from the model fitting using "ethnicity", "agegroup", and "stage" as the predictors ("full_model_table.rds" and "full_model_table_hr.rds") can be found in the "tables" folder.
+The results from the model fitting using "ethnicity", "agegroup", and "stage" as the predictors ("full_model_table.rds" and "full_model_table_hr.png") can be found in the "tables" folder.
 
 
 The Concordance Index (C-index) is a measure of predictive accuracy or discrimination in survival analysis models, where a higher value indicates better discrimination. Comparing the models with only "ethnicity" (C-index = 0.52), only "agegroup" (C-index = 0.70), and only "stage" (C-index = 0.61), the model with all variables has the best predictive discrimination and model performance (C-index = 0.76).
@@ -272,16 +297,16 @@ The Concordance Index (C-index) is a measure of predictive accuracy or discrimin
 
 
 ```{r}
-#Set a seed
+# Set a seed
 rngseed = 1234
 set.seed(rngseed)
 
-#Split the data randomly into 75% train and 25% test set
+# Split the data randomly into 75% train and 25% test set
 data_split <- initial_split(seer, prop = 3/4)
 train_data <- training(data_split)
 test_data <- testing(data_split)
 
-#Fit the Cox proportional hazards model with only "ethnicity" using the training data
+# Fit the Cox proportional hazards model with only "ethnicity" using the training data
 simple_model_ethnicity_train <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(ethnicity), ref = "White"), data = train_data, method = "breslow")
 summary(simple_model_ethnicity_train)
 
@@ -290,7 +315,7 @@ predicted <- predict(simple_model_ethnicity_train, type = "lp", se.fit = TRUE)$f
 c_index <- survConcordance(Surv(survival_time, death) ~ predicted, data = train_data)
 print(c_index[[1]])
 
-#Fit the Cox proportional hazards model with only "agegroup" using the training data
+# Fit the Cox proportional hazards model with only "agegroup" using the training data
 simple_model_agegroup_train <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(agegroup), ref = "0-49 years"), data = train_data, method = "breslow")
 summary(simple_model_agegroup_train)
 
@@ -299,7 +324,7 @@ predicted <- predict(simple_model_agegroup_train, type = "lp", se.fit = TRUE)$fi
 c_index <- survConcordance(Surv(survival_time, death) ~ predicted, data = train_data)
 print(c_index[[1]])
 
-#Fit the Cox proportional hazards model with only "stage" using the training data
+# Fit the Cox proportional hazards model with only "stage" using the training data
 simple_model_stage_train <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(stage), ref = "Localized"), data = train_data, method = "breslow")
 summary(simple_model_stage_train)
 
@@ -308,7 +333,7 @@ predicted <- predict(simple_model_stage_train, type = "lp", se.fit = TRUE)$fit
 c_index <- survConcordance(Surv(survival_time, death) ~ predicted, data = train_data)
 print(c_index[[1]])
 
-#Fit the full Cox proportional hazards model using the training data
+# Fit the full Cox proportional hazards model using the training data
 full_model_train <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(ethnicity), ref = "White") + relevel(factor(agegroup), ref = "0-49 years") + relevel(factor(stage), ref = "Localized"), data = train_data, method = "breslow")
 summary(full_model_train)
 
@@ -319,5 +344,196 @@ print(c_index[[1]])
 ```
 
 
-Using the training data and comparing the C-index values for the four models, the best-performing model is the full model (C-index = ), and the worst-performing model is the model with only "ethnicity" (C-index = 0.52).
+Using the training data and comparing the C-index values for the four models, the best-performing model is the full model (C-index = 0.76), and the worst-performing model is the model with only "ethnicity" (C-index = 0.52).
+
+
+# More Model Fitting
+
+
+Although the research question of this project is causal rather than predictive, let's compare the full Cox proportional hazards model with other types of models. First, let's use the training data to fit a logistic regression model with "death" as the outcome and all variables as predictors.
+
+
+```{r}
+# Fit a logistic regression model to the outcome "death" using the other variables as the predictors
+train_data$death <- as.factor(train_data$death)
+
+logistic_model <- logistic_reg() %>% set_engine("glm")
+
+logistic_fit <- logistic_model %>% fit(death ~ relevel(factor(ethnicity), ref = "White") + relevel(factor(agegroup), ref = "0-49 years") + relevel(factor(stage), ref = "Localized"), data = train_data)
+
+tidy(logistic_fit)
+
+# Compute accuracy
+accuracy <- logistic_fit %>% 
+  predict(train_data) %>% 
+  bind_cols(train_data) %>% 
+  metrics(truth = death, estimate = .pred_class) %>% 
+  filter(.metric == "accuracy") 
+
+# Compute ROC-AUC
+auc <-  logistic_fit %>%
+  predict(train_data, type = "prob") %>%
+  bind_cols(train_data) %>%
+  roc_auc(truth = death, .pred_1)
+
+# Print accuracy and ROC-AUC
+print(accuracy)
+print(auc)
+```
+
+
+In the logistic regression model, all variables are significantly associated with the outcome "death" (p-values < 0.001). The accuracy of the model is 0.80, and the ROC-AUC is 0.76.
+
+
+Next let's look at a LASSO regression model.
+
+
+```{r}
+# Fit a LASSO regression model to the outcome "death" using the other variables as the predictors
+lasso_model <- logistic_reg(penalty = 0.1, mixture = 1) %>% set_engine("glmnet")
+
+lasso_wflow <- workflow() %>% 
+  add_model(lasso_model) %>% 
+  add_formula(death ~ relevel(factor(ethnicity), ref = "White") + 
+                 relevel(factor(agegroup), ref = "0-49 years") + 
+                 relevel(factor(stage), ref = "Localized"))
+
+lasso_fit <- lasso_wflow %>% fit(data = train_data)
+
+# Compute accuracy
+accuracy <- lasso_fit %>% 
+  predict(train_data) %>% 
+  bind_cols(train_data) %>% 
+  metrics(truth = death, estimate = .pred_class) %>% 
+  filter(.metric == "accuracy") 
+
+# Compute ROC-AUC
+auc <-  lasso_fit %>%
+  predict(train_data, type = "prob") %>%
+  bind_cols(train_data) %>%
+  roc_auc(truth = death, .pred_1)
+
+# Print accuracy and ROC-AUC
+print(accuracy)
+print(auc)
+```
+
+
+In the LASSO regression model, the accuracy is 0.76, and the ROC-AUC is 0.65.
+
+
+Now let's tune the LASSO regression model using 5-fold cross-validation repeated 5 times to evaluate model performance during the tuning process.
+
+
+```{r}
+# Set a seed
+rngseed = 1234
+set.seed(rngseed)
+
+# Define the workflow
+lasso_model_tune <- logistic_reg(penalty = tune(), mixture = 1) %>% set_engine("glmnet")
+
+lasso_wflow_tune <- workflow() %>% 
+  add_model(lasso_model_tune) %>% 
+  add_formula(death ~ relevel(factor(ethnicity), ref = "White") + 
+                 relevel(factor(agegroup), ref = "0-49 years") + 
+                 relevel(factor(stage), ref = "Localized"))
+
+lasso_fit_tune <- lasso_wflow_tune %>% fit(data = train_data)
+
+# Define the penalty grid
+penalty_grid <- tibble(penalty = 10^seq(-5, 2, length.out = 50))
+
+# Tune the model with cross-validation
+lasso_cv_tune <- tune_grid(lasso_wflow_tune,
+  resamples = vfold_cv(train_data, v = 5, repeats = 5),
+  grid = penalty_grid)
+
+# Look at tuning diagnostics
+autoplot(lasso_cv_tune)
+```
+
+
+The plot for the LASSO model tuned with cross-validation shows that the LASSO model performs best (highest accuracy and ROC-AUC values) for low penalty values, and the accuracy and ROC-AUC values decrease as the amount of regularization (penalty parameter) increases.
+
+
+Finally, let's look at a linear discriminant analysis (DA) model.
+
+
+```{r}
+# Fit a linear discriminant analysis model to the outcome "death" using the other variables as the predictors
+da_model <- discrim_linear()
+
+da_wflow <- workflow() %>%
+  add_model(da_model) %>% 
+  add_formula(death ~ relevel(factor(ethnicity), ref = "White") + 
+                 relevel(factor(agegroup), ref = "0-49 years") + 
+                 relevel(factor(stage), ref = "Localized"))
+
+da_fit <- da_wflow %>% fit(data = train_data)
+
+# Compute accuracy
+accuracy <- da_fit %>% 
+  predict(train_data) %>% 
+  bind_cols(train_data) %>% 
+  metrics(truth = death, estimate = .pred_class) %>% 
+  filter(.metric == "accuracy") 
+
+# Compute ROC-AUC
+auc <-  da_fit %>%
+  predict(train_data, type = "prob") %>%
+  bind_cols(train_data) %>%
+  roc_auc(truth = death, .pred_1)
+
+# Print accuracy and ROC-AUC
+print(accuracy)
+print(auc)
+```
+
+
+In the linear discriminant analysis model, the accuracy is 0.80, and the ROC-AUC is 0.76.
+
+
+Comparing the logistic, LASSO, and DA models, the accuracy and ROC-AUC values are highest for the logistic and DA models. We conclude that these models perform better than the LASSO model. Because the accuracy and ROC-AUC values for the logistic and DA models are the same, let's pick the logistic regression model as the overall best of these predictive models since it's simpler and easier to interpret.
+
+
+Let's do a final model evaluation on the logistic regression model using the test data.
+
+
+```{r}
+# Fit a logistic regression model to the outcome "death" using the other variables as the predictors
+test_data$death <- as.factor(test_data$death)
+
+logistic_model <- logistic_reg() %>% set_engine("glm")
+
+logistic_fit <- logistic_model %>% fit(death ~ relevel(factor(ethnicity), ref = "White") + relevel(factor(agegroup), ref = "0-49 years") + relevel(factor(stage), ref = "Localized"), data = test_data)
+
+tidy(logistic_fit)
+
+# Compute accuracy
+accuracy <- logistic_fit %>% 
+  predict(test_data) %>% 
+  bind_cols(test_data) %>% 
+  metrics(truth = death, estimate = .pred_class) %>% 
+  filter(.metric == "accuracy") 
+
+# Compute ROC-AUC
+auc <-  logistic_fit %>%
+  predict(test_data, type = "prob") %>%
+  bind_cols(test_data) %>%
+  roc_auc(truth = death, .pred_1)
+
+# Print accuracy and ROC-AUC
+print(accuracy)
+print(auc)
+```
+
+
+Using the test data with the logistic regression model, all variables are significantly associated with the outcome "death" (p-values < 0.001). The accuracy of the model is 0.80, and the ROC-AUC is 0.76.
+
+
+# Summary of Statistical Analysis
+
+
+We used data on prostate cancer survival among male patients in the U.S. to investigate whether race and ethnicity are associated with time to all-cause mortality. The other variables were age group and cancer stage. For the survival analysis approach, we looked at four Cox proportional hazards models: three univariable models and the full model with all covariates. Comparing the models with only "ethnicity" (C-index = 0.52), only "agegroup" (C-index = 0.70), and only "stage" (C-index = 0.61), the model with all variables has the best predictive discrimination and model performance (C-index = 0.76). For the non-survival analysis approach, we looked at three other full models: logistic regression, LASSO regression, and discriminant analysis. The logistic regression model and the discriminant analysis model performed equally better than the LASSO regression model based on the accuracy (0.80) and ROC-AUC (0.76) values. We chose the logistic regression model for simplicity of interpretation. Because the research question for this project is etiologic rather than predictive, the results of the survival analysis approach using the Cox proportional hazards models will be discussed in the manuscript.
 
