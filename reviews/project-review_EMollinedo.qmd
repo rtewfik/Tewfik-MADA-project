@@ -1,0 +1,177 @@
+---
+title: Project Review
+author: Erick Mollinedo
+date: 04-24-2024
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Overview
+
+Title of project: "Survival Analysis of Males in the U.S. with Prostate Cancer Based on Race and Ethnicity"
+
+Name of project author(s): Ranni Tewfik
+
+Name of project reviewer: Erick Mollinedo
+
+
+# Specific project content evaluation
+Evaluate the different parts of the project by filling in the sections below.
+
+
+## Background, Context and Motivation
+How well is the context of the project described? Is a comprehensive background, including summary of previous/related work given? Is the project well placed into the context of existing work (including proper referencing of existing work). Is it clear why the project was undertaken and what new information it hopes to provide?
+
+### Feedback and Comments
+
+Great job with the background section! I would include at least two references of peer-reviewed studies that affirm that african american males have a higher risk of prostate cancer than other ethnicities. Also, you could place just one citation at the end of the first paragraph instead of repeating in the same paragraph. Again, good job with the background info and the rationale of why you did this project!
+
+### Summary assessment (PICK ONE, DELETE THE OTHERS)
+
+* strong contextualization and motivation
+
+
+## Question description
+How well and clear are the question(s)/hypotheses the project aims to address described? Is it clear how the questions relate to the data?
+
+
+### Feedback and Comments
+
+No bad comments on this. The question is simple, clear and straight to the point.
+
+### Summary assessment
+
+* question/hypotheses fully clear
+
+
+## Data description
+How well is the data overall described? Is the source provided? Is a codebook or other meta-information available that makes it clear what the data is? 
+
+### Feedback and Comments
+
+The origin of this dataset is well described, also the reference and how it was obtained. Simple and straight to the point. Nothing to correct in here.
+
+### Summary assessment
+
+* source and overall structure of data well explained
+
+
+## Data wrangling and exploratory analysis
+How well is the data cleaned/processed and explored? Are all steps reasonable and well explained? Are alternatives discussed and considered? Are meaningful exploratory results shown (e.g. in the supplementary materials)?
+
+### Feedback and Comments
+
+Good job on the data cleaning and exploratory analyses. All the tables and figures necessary were included either in the manuscript or the supplementary materials documents.
+I thought the description of most the steps performed during data processing and exploring were clear, however, I would suggest to add more comments about specific sections. For example, when describing the Kaplan meier curves, describe the purpose of computing them and what some of the functions do. I appreciate you listed where the final plots and tables will be located. Also, while running the code, some parts took a couple minutes to process (not sure if this is normal due to the packages you used and the dataset, or if it was just on my computer, I just thought of mentioning it)
+
+### Summary assessment
+
+* essentially no weaknesses in wrangling and exploratory component
+
+
+## Appropriateness of Analysis
+Were the analysis methods appropriate for the data? Was the analysis done properly? Were different components of the analysis (e.g. performance measure, variable selection, data pre-processing, model evaluation) done in the best way possible and explained well?
+
+### Feedback and Comments
+
+I don't see any faults in the data analyses. It was clear from the beginning that the Cox proportional hazards model was the right choice for the analyses. Also, I appreciate the inclusion of other models for the non-survival analysis. All the reasoning on why the final models were chosen were appropriate, based on the metrics and easiness of interpretation. All the steps were clearly documented except for the Train/Test data split. At the beginning I was confused on why it was performed up to that point, but it was clear when moving to following steps, so I would recommend to add a description on why performing this step. Good job!
+
+### Summary assessment
+
+* strong and reasonable analysis
+
+
+## Presentation
+How well are results presented? Are tables and figures easy to read and understand? Are the main figures/tables publication level quality? 
+
+### Feedback and Comments
+
+The tables and graphs are easy to understand. However, I would edit the figures to not include the titles, since the titles are automatically added in the quarto manuscript when referenced. Also, the warning when loading the tables and figures is shown on the manuscript and this should be hidden. I think these warnings can be hidden when using `{r echo=FALSE}` in the code chunk.
+
+### Summary assessment
+
+* results are presented ok, with room for improvement
+
+
+## Discussion/Conclusions
+Are the study findings properly discussed? Are strengths and limitations acknowledged? Are findings interpreted properly?
+
+### Feedback and Comments
+
+Good job on the discussion of your findings. But I believe there is room for improvement. You can discuss about the model you used and the one you selected, also discussing about the strengths and limitations of these models. You showed other ways of modeling the data (LASSO, DA) so I believe you could talk about them in the discussion.
+
+### Summary assessment
+
+* minor parts wrong, missing or unclear
+
+
+## Further comments
+
+I think overall this is great. My only comments are minor improvements: hid the warnings in the manuscript and supplementary material when loading the graphs and tables. Also, improve the discussion in terms of the modeling process and model selection. Probably it would be ideal to have more references, at least 10? (just a suggestion)
+
+
+
+# Overall project content evaluation
+Evaluate overall features of the project  by filling in the sections below.
+
+
+## Structure
+Is the project well structured? Are files in well labeled folders? Do files have reasonable names? Are all "junk" files not needed for analysis/reproduction removed? By just looking at files and folders, can you get an idea of how things fit together?
+
+### Feedback and Comments
+
+I don't see anything missing or out of place. I believe everything is correctly labeled and in the right place. Easy to see and explore for anyone who doesn't owe the repository. Good job!
+
+### Summary assessment
+
+* well structured
+
+
+## Documentation 
+How well is the project documented? Are you able to understand each step of the whole analysis, each decision that was made, and each line of code? Is enough information provided as comments in code or as part of Rmd files? 
+
+### Feedback and Comments
+
+I think I already mentioned this, there were just minor parts that I believe could be improved in terms of labeling what these steps are for. Specifically in the data exploring and statistical analysis .qmd documents. Other than that, the files are perfect. I appreciate how you labeled the decisions performed in the statistical analysis document.
+
+### Summary assessment
+
+* fully and well documented
+
+
+## Reproducibility
+Are all results fully reproducible? Is documentation provided which clearly explains how to reproduce things, and does it work without the need for any manual intervention? Are you able to re-run the whole analysis without having to do manual interventions/edits?
+
+### Feedback and Comments
+
+Everything runs good and in a reproducible way. The only caveat is that some chunks take some minutes to completely run, as I mentioned before, but I think this is due to the nature of the functions and the big-size data set. Great job!
+
+
+### Summary assessment
+
+* fully reproducible without issues
+
+
+## Thoroughness
+How thorough was the overall study? Were alternatives (e.g. different ways of processing the data or different models) considered? Were alternatives discussed? Were the questions/hypotheses fully and thoroughly addressed?
+
+### Feedback and Comments
+
+Yes, there was the addition of other models to try to answer the main question. Also, an explanation was provided at the end of the documents. No major issues in this analysis.
+
+### Summary assessment
+
+* strong level of thorougness
+
+
+## Further comments
+
+I believe the project looks great! In terms of content, I would suggest to label more carefully the steps during data processing and exploring. Some minor parts were not easily clear to me.
+
+
+
+
+
