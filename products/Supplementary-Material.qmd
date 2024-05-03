@@ -44,7 +44,7 @@ Load the following R packages before running any code:
 # Distribution of Survival Time
 
 Figure 1. Histogram of survival time distribution in months.
-```{r}
+```{r echo = FALSE}
 library(here)
 library(knitr)
 knitr::include_graphics(here("results/figures/survtime_distribution.png"))
@@ -58,7 +58,7 @@ The histogram for survival time in months shows a right-skewed (positively skewe
 # Ethnicity and Survival Time, Stratified by Mortality
 
 Figure 2. Bar Chart of Ethnicity and Survival Time, Stratified by Mortality
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/ethnicity_survtime_death_barchart.png"))
 ```
 
@@ -70,7 +70,7 @@ The bar chart shows that for each ethnicity, the survival time in months was sli
 # Mortality and Survival Time, Stratified by Ethnicity
 
 Figure 3. Boxplot of Mortality and Survival Time, Stratified by Ethnicity.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/death_survtime_ethnicity_boxplot.png"))
 ```
 
@@ -82,25 +82,25 @@ The boxplot shows that among those with all-cause mortality, the survival time i
 # Survival Curves
 
 Figure 4. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by age group.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/survivalcurve_age.png"))
 ```
 
 
 Figure 5. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by cancer stage.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/survivalcurve_stage.png"))
 ```
 
 
 Figure 6. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by education.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/survivalcurve_education.png"))
 ```
 
 
 Figure 7. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by family history of cancer.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/survivalcurve_fhx.png"))
 ```
 
@@ -112,19 +112,19 @@ The survival curves show that older prostate cancer patients with distant cancer
 # Cox Proportional Hazards Assessment
 
 Figure 8. Log-log survival curve for ethnicity.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/loglogcurve_ethnicity.png"))
 ```
 
 
 Figure 9. Log-log survival curve for age group.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/loglogcurve_age.png"))
 ```
 
 
 Figure 10. Log-log survival curve for cancer stage.
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/loglogcurve_stage.png"))
 ```
 
@@ -136,7 +136,7 @@ The log-log survival curves are parallel for "ethnicity", "agegroup", and "stage
 # Unadjusted Cox Proportional Hazards Model
 
 *Table 1. Unadjusted hazard ratios and 95% confidence intervals for the effect of ethnicity on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).*
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/tables/simple_model_ethnicity_table_hr.png"))
 ```
 
@@ -146,7 +146,7 @@ The rate of all-cause mortality was 1.10 times higher in Non-Hispanic Black male
 {{< pagebreak >}}
 
 *Table 2. Unadjusted hazard ratios and 95% confidence intervals for the effect of age on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).*
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/tables/simple_model_agegroup_table_hr.png"))
 ```
 
@@ -156,7 +156,7 @@ The rate of all-cause mortality was 16.63 times higher in males age 80+ years th
 {{< pagebreak >}}
 
 *Table 3. Unadjusted hazard ratios and 95% confidence intervals for the effect of cancer stage on time to all-cause mortality among males in the U.S. with prostate cancer (SEER database).*
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/tables/simple_model_stage_table_hr.png"))
 ```
 

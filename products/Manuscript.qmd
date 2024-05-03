@@ -33,9 +33,9 @@ This project investigated male patients with prostate cancer in the U.S. from 20
 
 The main outcome of interest was all-cause mortality. The main exposure of interest was race/ethnicity, which included the following categories: “Non-Hispanic White”, “Non-Hispanic Black”, “Non-Hispanic Asian or Pacific Islander”, “Hispanic (all races)”, and “Other”. The other covariates, age at diagnosis and cancer stage at diagnosis, were categorical variables. The age groups were coded as “0-49 years”, “50-59 years”, “60-69 years”, “70-79 years”, and “≥ 80 years”. The categories for stage at diagnosis were “localized” (i.e., cancer is limited to where it originated), “regional” (i.e., cancer has spread to nearby lymph nodes, tissues, or organs), and “distant” (i.e., cancer has spread to distant body parts).
 
-## Statistical Analysis
+## Statistical Analyses
 
-All analyses were conducted using R software (version 4.3.1). Survival analysis was performed for Kaplan-Meier survival estimates and curves. Cox regression was used to compute adjusted hazard ratios and 95% confidence intervals. The Cox proportional hazards assumption was tested using log-log survival curves and extended Cox models for each covariate.
+All analyses were conducted using R software (version 4.3.1). Survival analysis was performed for Kaplan-Meier survival estimates and curves. Cox regression was used to compute adjusted hazard ratios and 95% confidence intervals. The Cox proportional hazards assumption was tested using log-log survival curves and extended Cox models for each covariate. Secondary analyses were conducted for three predictive models: logistic regression, LASSO regression, and discriminant analysis.
 
 {{< pagebreak >}}
 
@@ -43,7 +43,8 @@ All analyses were conducted using R software (version 4.3.1). Survival analysis 
 
 This project included 776,196 males in the U.S. with prostate cancer from the SEER database. Of these, 540,057 (69.6%) were Non-Hispanic White; 526,468 (67.8%) were age 60-79 years at diagnosis; 629,222 (81.1%) had localized stage of prostate cancer at diagnosis; 401,176 (51.7%) had at least a college degree; and 490,476 (63.2%) had a family history of cancer (Table 1). The mean survival time for each ethnic group of prostate cancer patients ranged from 64 months ("Other") to 78 months ("White") (Table 1).
 
-```{r}
+*Table 1. Study sample characteristics of males in the U.S. with prostate cancer by race and ethnicity.*
+```{r echo = FALSE}
 library(here)
 library(knitr)
 knitr::include_graphics(here("results/tables/table1.png"))
@@ -51,17 +52,25 @@ knitr::include_graphics(here("results/tables/table1.png"))
 
 {{< pagebreak >}}
 
-In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5% (Figure 1). Non-Hispanic Black males had statistically significantly lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2). Based on the log-log survival curves and extended Cox models, the proportional hazards assumption holds for all covariates ("Supplementary Material").
+Because the research question for this project is etiologic rather than predictive, the results of the survival analysis approach (etiologic) using Cox proportional hazards models are mainly discussed in this manuscript. However, secondary analyses were also conducted using a non-survival analysis approach (predictive). The results of both analytic approaches are discussed below.
 
-Figure 1. Kaplan-Meier survival curves for males in the U.S. with prostate cancer.
+## Etiologic Analyses
 
-```{r}
+An etiologic (survival analysis) approach was implemented to investigate whether race and ethnicity are associated with time to all-cause mortality. The covariates were age group and cancer stage. Four Cox proportional hazards models were analyzed: three univariable models and the full model with all covariates. Comparing the models with only "ethnicity" (C-index = 0.52), only "agegroup" (C-index = 0.70), and only "stage" (C-index = 0.61), the model with all variables was selected as the best survival analysis model (C-index = 0.76). Backwards elimination analysis supported the selection of the full Cox proportional hazards model.
+
+In assessing time to death (all-cause mortality), the overall 10-year survival was 68.5% (Figure 1). Non-Hispanic Black males had statistically significantly lower survival than other races and ethnicities across the full follow-up time (1-year = 95.7%; 5-year = 82.2%; 10-year = 66.1%) (Figure 2). Based on the log-log survival curves and extended Cox models, the proportional hazards assumption holds for all covariates (see "Supplementary Material" section).
+
+{{< pagebreak >}}
+
+*Figure 1. Kaplan-Meier survival curves for males in the U.S. with prostate cancer.*
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/survivalcurve_total.png"))
 ```
 
-Figure 2. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by race and ethnicity.
+{{< pagebreak >}}
 
-```{r}
+*Figure 2. Kaplan-Meier survival curves for males in the U.S. with prostate cancer, stratified by race and ethnicity.*
+```{r echo = FALSE}
 knitr::include_graphics(here("results/figures/survivalcurve_ethnicity.png"))
 ```
 
@@ -70,11 +79,17 @@ After adjustment for age and cancer stage at diagnosis, the rate of all-cause mo
 {{< pagebreak >}}
 
 *Table 2. Adjusted hazard ratios and 95% confidence intervals for time to all-cause mortality among males with prostate cancer.*
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics(here("results/tables/full_model_table_hr.png"))
 ```
 
-{{< pagebreak >}}
+## Predictive Analyses
+
+Because the research question for this project is etiologic rather than predictive, the results of the survival analysis approach using the Cox proportional hazards models are discussed in this manuscript. However, secondary analyses were conducted using a predictive, non-survival analysis approach, which looked at three other full models: logistic regression, LASSO regression, and discriminant analysis. All models were fitted using training data, and the LASSO regression model was tuned using five-fold cross-validation repeated five times to evaluate model performance during the tuning process. The logistic regression model and the discriminant analysis model performed equally better than the LASSO regression model based on the accuracy (0.80) and ROC-AUC (0.76) values. The logistic regression model was chosen as the best predictive model for simplicity of interpretation. A final model evaluation on the logistic regression model using the test data was performed. More details on the predictive analyses are provided in the "statistical-analysis.qmd" file in the GitHub repository.
+ 
+## Supplementary Material
+
+The "Supplementary Material" document includes the results of the exploratory and statistical analyses that were not included in this manuscript. In addition to the Kaplan-Meier survival curves stratified by age group, cancer stage, education, and family history of cancer, the document provides other figures, including the distribution of survival time and stratified plots of ethnicity, survival time, and mortality. Log-log survival curves for ethnicity, age group, and cancer stage are provided as part of the Cox proportional hazards assessment. Finally, tables for the unadjusted hazards ratios and 95% confidence intervals for the effects of ethnicity, age, and cancer stage on all-cause mortality are included.
 
 # Discussion
 

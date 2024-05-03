@@ -9,10 +9,13 @@ output: html_document
 # Exploratory Analysis
 
 
-This exploratory analysis script loads the processed data and explores the 7 variables in the dataset.
+This exploratory analysis script loads the processed data and explores the variables in the dataset.
 
 
 # Load and Check Processed Data
+
+
+First, let's load and summarize the processed data for data exploration.
 
 
 ```{r}
@@ -41,7 +44,13 @@ head(seer)
 ```
 
 
+The processed dataset has 776,196 observations and 7 variables: "ethnicity", "agegroup", "stage", "education", "family_history", "death", and "survival_time".
+
+
 # Data Exploration - Tables
+
+
+Now let's explore the variables in the processed dataset, including frequency and proportion tables of the categorical variables and a summary table of all variables.
 
 
 ```{r}
@@ -87,6 +96,9 @@ A summary table of the data ("summarytable.rds") can be found in the "tables" fo
 # Table 1 - Study sample characteristics
 
 
+Next let's create a table of the study sample characteristics from the data.
+
+
 ```{r}
 # Create Table 1 (study sample characteristics) from the data
 table <- seer %>% 
@@ -111,7 +123,10 @@ gtsave(table1, file = here("results/tables/table1.png"))
 Table 1 of the study sample characteristics ("table1.png") can be found in the "tables" folder.
 
 
-Kaplan-Meier Survival Tables
+# Kaplan-Meier Survival Tables
+
+
+Then let's look at the overall 1-year, 5-year, and 10-year Kaplan-Meier survival, as well as survival by ethnicity, age group, and cancer stage.
 
 
 ```{r}
@@ -133,6 +148,9 @@ summary(survfit(Surv(survival_time, death) ~ stage), times <- c(12, 60, 120))
 # Data Exploration - Figures
 
 
+Let's also explore some figures, starting with a histogram of survival time.
+
+
 ```{r}
 # Create a histogram of "survival_time"
 survtime_hist <- seer %>% ggplot(aes(x = survival_time)) + geom_histogram() 
@@ -142,7 +160,11 @@ plot(survtime_hist)
 ggsave(filename = here("results/figures/survtime_distribution.png"), plot = survtime_hist) 
 ```
 
+
 A histogram of the distribution of the "survival_time" variable ("survtime_distribution.png") can be found in the "figures" folder.
+
+
+Then let's create some boxplots of survival time by death status, ethnicity, age group, cancer stage, education, and family history of cancer.
 
 
 ```{r}
@@ -178,6 +200,8 @@ ggplot(seer, aes(x = factor(family_history), y = survival_time)) +
 ```
 
 
+Let's also create boxplots of survival time by death status, stratified by ethnicity.
+
 ```{r}
 # Create a boxplot of "death" and "survival_time", stratified by "ethnicity"
 death_survtime_ethnicity_box <- seer %>% ggplot(aes(x = factor(death), y = survival_time, fill = ethnicity)) +
@@ -190,6 +214,9 @@ ggsave(filename = here("results/figures/death_survtime_ethnicity_boxplot.png"), 
 
 
 Boxplots of the distribution of the "survival_time" variable for "death" (no vs. yes), stratified by "ethnicity" ("death_survtime_ethnicity_boxplot.png") can be found in the "figures" folder.
+
+
+Then let's create bar charts of survival time by ethnicity, stratified by death status.
 
 
 ```{r}
@@ -206,12 +233,17 @@ ggsave(filename = here("results/figures/ethnicity_survtime_death_barchart.png"),
 Bar charts of the frequency of the "survival_time" variable for "ethnicity", stratified by "death" (no vs. yes) ("ethnicity_survtime_death_barchart.png") can be found in the "figures" folder.
 
 
+Now let's look at residual plots of survival time as the outcome and all other variables as the predictors.
+
+
 ```{r}
 # Create residual plots
 model <- lm(survival_time ~ death + ethnicity + agegroup + stage + education + family_history, data = seer)
 residualPlots(model)
 ```
 
+
+Finally, let's create an overall Kaplan-Meier survival curve, as well as survival curves stratified by ethnicity, age group, cancer stage, education, and family history of cancer.
 
 ```{r}
 # Create an overall Kaplan-Meier survival curve
@@ -332,4 +364,7 @@ ggsave(filename = here("results/figures/survivalcurve_fhx.png"), plot = survplot
 
 
 A Kaplan-Meier survival curve stratified by "family_history" ("survivalcurve_fhx.png") can be found in the "figures" folder.
+
+
+The figures and tables saved in this exploratory analysis script are further discussed in the "Supplementary Material" document. 
 

@@ -9,10 +9,13 @@ output: html_document
 # Statistical Analysis
 
 
-This statistical analysis script loads the processed data and does statistical analysis.
+This statistical analysis script loads the processed data and performs statistical analyses.
 
 
 # Load and Check Processed Data
+
+
+First, let's load and summarize the processed data for statistical analyses.
 
 
 ```{r}
@@ -48,7 +51,14 @@ head(seer)
 ```
 
 
+The processed dataset has 776,196 observations and 7 variables: "ethnicity", "agegroup", "stage", "education", "family_history", "death", and "survival_time".
+
+
 # Backward Elimination
+
+
+Now let's use the backward elimination technique to help decide the best Cox proportional hazards model for survival analysis.
+
 
 ```{r}
 # Fit the full Cox proportional hazards model
@@ -65,6 +75,9 @@ Based on the results of the backward elimination process using the AIC criterion
 
 
 # Proportional Hazards Assessment
+
+
+Then let's conduct a proportional hazards assessment to evaluate whether the proportional hazards assumption holds for a Cox proportional hazards regression model.
 
 
 ```{r}
@@ -94,14 +107,20 @@ dev.off()
 ```
 
 
-The log-log survival curves to test the proportional-hazards assumption for the Cox proportional-hazards model can be found in the "figures" folder.
+The log-log survival curves to test the proportional hazards assumption for the Cox proportional hazards model can be found in the "figures" folder.
+
+
+The proportional hazards assumption holds, indicating that a Cox proportional hazards model is appropriate for this analysis.
 
 
 # Unadjusted Analyses
 
 
+Next let's conduct unadjusted analyses of the Cox proportional hazards model using only ethnicity, age group, or cancer stage is the predictor.
+
+
 ```{r}
-# Fit the Cox proportional-hazards model using "ethnicity" as the predictor
+# Fit the Cox proportional hazards model using "ethnicity" as the predictor
 seer$death <- as.numeric(seer$death)
 simple_model_ethnicity <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(ethnicity), ref = "White"), data = seer, method = "breslow")
 summary(simple_model_ethnicity)
@@ -163,7 +182,7 @@ The results from the model fitting using only "ethnicity" as the predictor ("sim
 
 
 ```{r}
-# Fit the Cox proportional-hazards model using "agegroup" as the predictor
+# Fit the Cox proportional hazards model using "agegroup" as the predictor
 seer$death <- as.numeric(seer$death)
 simple_model_agegroup <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(agegroup), ref = "0-49 years"), data = seer, method = "breslow")
 summary(simple_model_agegroup)
@@ -225,7 +244,7 @@ The results from the model fitting using only "agegroup" as the predictor ("simp
 
 
 ```{r}
-# Fit the Cox proportional-hazards model using "stage" as the predictor
+# Fit the Cox proportional hazards model using "stage" as the predictor
 seer$death <- as.numeric(seer$death)
 simple_model_stage <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(stage), ref = "Localized"), data = seer, method = "breslow")
 summary(simple_model_stage)
@@ -289,8 +308,11 @@ The results from the model fitting using only "stage" as the predictor ("simple_
 # Adjusted Analysis
 
 
+Finally, let's perform adjusted analysis of the full Cox proportional hazards model using  ethnicity, age group, and cancer stage as the predictors.
+
+
 ```{r}
-# Fit the Cox proportional-hazards model using "ethnicity", "agegroup", and "stage" as the predictors
+# Fit the Cox proportional hazards model using "ethnicity", "agegroup", and "stage" as the predictors
 full_model <- coxph(formula = Surv(survival_time, death) ~ relevel(factor(ethnicity), ref = "White") + relevel(factor(agegroup), ref = "0-49 years") + relevel(factor(stage), ref = "Localized"), data = seer, method = "breslow")
 summary(full_model)
 
@@ -354,6 +376,8 @@ The Concordance Index (C-index) is a measure of predictive accuracy or discrimin
 
 
 # Train/Test Split
+
+The survival analysis conducted up to this point was an etiologic/causal approach to the research question and data. As part of secondary analyses, we will also consider a predictive approach. First, we need to create training and testing datasets from the full dataset. We'll use the training data to fit the four Cox proportional hazards models again and compare C-index values.
 
 
 ```{r}
@@ -592,8 +616,11 @@ print(auc)
 Using the test data with the logistic regression model, all variables are significantly associated with the outcome "death" (p-values < 0.001). The accuracy of the model is 0.80, and the ROC-AUC is 0.76.
 
 
-# Summary of Statistical Analysis
+# Summary of Statistical Analyses
 
 
 We used data on prostate cancer survival among male patients in the U.S. to investigate whether race and ethnicity are associated with time to all-cause mortality. The other variables were age group and cancer stage. For the survival analysis approach, we looked at four Cox proportional hazards models: three univariable models and the full model with all covariates. Comparing the models with only "ethnicity" (C-index = 0.52), only "agegroup" (C-index = 0.70), and only "stage" (C-index = 0.61), the model with all variables has the best predictive discrimination and model performance (C-index = 0.76). For the non-survival analysis approach, we looked at three other full models: logistic regression, LASSO regression, and discriminant analysis. The logistic regression model and the discriminant analysis model performed equally better than the LASSO regression model based on the accuracy (0.80) and ROC-AUC (0.76) values. We chose the logistic regression model for simplicity of interpretation. Because the research question for this project is etiologic rather than predictive, the results of the survival analysis approach using the Cox proportional hazards models will be discussed in the manuscript.
+
+
+The figures and tables saved in this statistical analysis script are further discussed in the "Supplementary Material" document. 
 

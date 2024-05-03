@@ -1,0 +1,8 @@
+Variable,Class,Description
+race,character,race/ethnicity
+age,character,age group in years
+stage,character,cancer stage
+survival_months,character,time to all-cause mortality or end of follow-up in months
+vital_status,character,vital status (alive or dead)
+education,character,level of educational attainment
+family_history,character,family history of cancer (yes or no)
